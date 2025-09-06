@@ -7,12 +7,15 @@ import { ThemedView } from "@/components/ThemedView";
 import { Card } from "@/components/Card";
 
 import dayjs, { TIME_FORMAT } from "@/utils/dates";
+import { GameScore } from "./GameScore";
 
 type GameCardProps = {
   game: Game;
 };
 
 export function GameCard({ game }: GameCardProps) {
+  const showDate = game.status === "Sin comenzar";
+
   return (
     <Card style={styles.gameCard}>
       <ThemedView style={styles.teamsSide}>
@@ -37,9 +40,13 @@ export function GameCard({ game }: GameCardProps) {
       </ThemedView>
 
       <ThemedView>
-        <ThemedText type="defaultSemiBold" style={styles.gameTime}>
-          {dayjs(game.datetime).format(TIME_FORMAT)}
-        </ThemedText>
+        {showDate ? (
+          <ThemedText type="defaultSemiBold" style={styles.gameTime}>
+            {dayjs(game.datetime).format(TIME_FORMAT)}
+          </ThemedText>
+        ) : (
+          <GameScore score={game.score} />
+        )}
       </ThemedView>
     </Card>
   );
