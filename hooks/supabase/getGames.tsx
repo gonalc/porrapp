@@ -6,31 +6,31 @@ type AlternateNames = {
   enEN: string;
   itIT?: string;
   ptBR?: string;
-}
+};
 
 type TeamScore = {
   totalScore: string;
   subScore: string;
-}
+};
 
 type Winner = {
   id: string;
   name: string;
-}
+};
 
 type Period = {
   id: number;
   name: string;
   alternateNames: AlternateNames;
   startTime?: string | null;
-}
+};
 
 type Score = {
   homeTeam: TeamScore;
   awayTeam: TeamScore;
   winner: Winner;
   period: Period;
-}
+};
 
 type Team = {
   id: string;
@@ -57,10 +57,10 @@ type Team = {
   };
   imageUrl: string;
   images: {
-    urlLogo: string[],
-    urlFlag: string[]
-  }
-}
+    urlLogo: string[];
+    urlFlag: string[];
+  };
+};
 
 export type Game = {
   id: string;
@@ -74,17 +74,20 @@ export type Game = {
   season: string;
   status: string;
   score: Score;
-}
+};
 
 export const useGetGames = () => {
   const [games, setGames] = useState<Game[]>([]);
 
   useEffect(() => {
     const fetchGames = async () => {
-      const { data, error } = await supabase.from('games').select('*');
+      const { data, error } = await supabase
+        .from("games")
+        .select("*")
+        .order("date", { ascending: true });
 
       if (error) {
-        console.error('[getGames hook] Error getting games: ', error);
+        console.error("[getGames hook] Error getting games: ", error);
       } else {
         setGames(data);
       }
@@ -94,4 +97,4 @@ export const useGetGames = () => {
   }, []);
 
   return { games };
-}
+};
