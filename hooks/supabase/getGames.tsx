@@ -1,5 +1,5 @@
 import { supabase } from "@/services/supabase";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type AlternateNames = {
   esES: string;
@@ -79,24 +79,27 @@ export type Game = {
 
 export const useGetGames = () => {
   const [games, setGames] = useState<Game[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const fetchGames = async () => {
-      const { data, error } = await supabase
-        .from("games")
-        .select("*")
-        .not('datetime', 'is', null)
-        .order("datetime", { ascending: true });
+  const fetchGames = useCallback(async () => {
+    setRefreshing(true);
+    const { data, error } = await supabase
+      .from("games")
+      .select("*")
+      .not('datetime', 'is', null)
+      .order("datetime", { ascending: true });
 
-      if (error) {
-        console.error("[getGames hook] Error getting games: ", error);
-      } else {
-        setGames(data);
-      }
-    };
-
-    fetchGames();
+    if (error) {
+      console.error("[getGames hook] Error getting games: ", error);
+    } else {
+      setGames(data);
+    }
+    setRefreshing(false);
   }, []);
 
-  return { games };
+  useEffect(() => {
+    fetchGames();
+  }, [fetchGames]);
+
+  return { games, refreshing, fetchGames };
 };

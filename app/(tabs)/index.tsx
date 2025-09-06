@@ -8,7 +8,7 @@ import { Card } from "@/components/Card";
 import { Separator } from "@/components/Separator";
 
 export default function HomeScreen() {
-  const { games } = useGetGames();
+  const { games, refreshing, fetchGames } = useGetGames();
 
   return (
     <ThemedView style={styles.container}>
@@ -51,6 +51,8 @@ export default function HomeScreen() {
         )}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <Separator />}
+        refreshing={refreshing}
+        onRefresh={fetchGames}
       />
     </ThemedView>
   );
