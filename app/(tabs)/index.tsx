@@ -12,43 +12,56 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title" style={styles.title}>Partidos</ThemedText>
+      <ThemedText type="title" style={styles.title}>
+        Partidos
+      </ThemedText>
 
       <FlatList
         data={games}
-        renderItem={({ item }) => (
-          <Card style={styles.gameCard}>
-            <ThemedView style={styles.teamsSide}>
-              <ThemedView style={styles.teamContainer}>
-                <Image
-                  source={{ uri: item.home_team.imageUrl }}
-                  style={styles.teamBadge}
-                />
-                <ThemedText type="defaultSemiBold">
-                  {item.home_team.fullName}
-                </ThemedText>
-              </ThemedView>
-              <ThemedView style={styles.teamContainer}>
-                <Image
-                  source={{ uri: item.away_team.imageUrl }}
-                  style={styles.teamBadge}
-                />
-                <ThemedText type="defaultSemiBold">
-                  {item.away_team.fullName}
-                </ThemedText>
-              </ThemedView>
-            </ThemedView>
+        renderItem={({ item, index }) => {
+          const previousGame = games[index - 1];
+          const showDate = !previousGame || previousGame.date !== item.date;
 
-            <ThemedView>
-              <ThemedText type="defaultSemiBold">
-                {dayjs(item.date).format(DATE_FORMAT)}
-              </ThemedText>
-              <ThemedText type="defaultSemiBold" style={styles.gameTime}>
-                {dayjs(item.datetime).format(TIME_FORMAT)}
-              </ThemedText>
-            </ThemedView>
-          </Card>
-        )}
+          return (
+            <>
+              {showDate && (
+                <ThemedView style={styles.dateContainer}>
+                  <ThemedText type="subtitle">
+                    {dayjs(item.date).format(DATE_FORMAT)}
+                  </ThemedText>
+                </ThemedView>
+              )}
+              <Card style={styles.gameCard}>
+                <ThemedView style={styles.teamsSide}>
+                  <ThemedView style={styles.teamContainer}>
+                    <Image
+                      source={{ uri: item.home_team.imageUrl }}
+                      style={styles.teamBadge}
+                    />
+                    <ThemedText type="defaultSemiBold">
+                      {item.home_team.fullName}
+                    </ThemedText>
+                  </ThemedView>
+                  <ThemedView style={styles.teamContainer}>
+                    <Image
+                      source={{ uri: item.away_team.imageUrl }}
+                      style={styles.teamBadge}
+                    />
+                    <ThemedText type="defaultSemiBold">
+                      {item.away_team.fullName}
+                    </ThemedText>
+                  </ThemedView>
+                </ThemedView>
+
+                <ThemedView>
+                  <ThemedText type="defaultSemiBold" style={styles.gameTime}>
+                    {dayjs(item.datetime).format(TIME_FORMAT)}
+                  </ThemedText>
+                </ThemedView>
+              </Card>
+            </>
+          );
+        }}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <Separator />}
         refreshing={refreshing}
@@ -86,11 +99,15 @@ const styles = StyleSheet.create({
     height: 35,
   },
   teamsSide: {
-    gap: 8
+    gap: 8,
   },
   teamContainer: {
     alignItems: "center",
     flexDirection: "row",
     gap: 8,
   },
+  dateContainer: {
+    marginHorizontal: 32,
+    marginTop: 16,
+  }
 });

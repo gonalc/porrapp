@@ -65,8 +65,8 @@ type Team = {
 export type Game = {
   id: string;
   code: string;
-  date: Date;
-  datetime: Date;
+  date: string;
+  datetime: string;
   tournament_name: string;
   location: string;
   home_team: Team;
