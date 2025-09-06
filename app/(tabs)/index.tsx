@@ -5,13 +5,14 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useGetGames } from "@/hooks/supabase/getGames";
 import { Card } from "@/components/Card";
+import { Separator } from "@/components/Separator";
 
 export default function HomeScreen() {
   const { games } = useGetGames();
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">Partidos!</ThemedText>
+      <ThemedText type="title" style={styles.title}>Partidos</ThemedText>
 
       <FlatList
         data={games}
@@ -46,6 +47,7 @@ export default function HomeScreen() {
           </Card>
         )}
         keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => <Separator />}
       />
     </ThemedView>
   );
@@ -55,6 +57,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 64,
+  },
+  title: {
+    textAlign: "center",
   },
   gamesContainer: {
     flex: 1,

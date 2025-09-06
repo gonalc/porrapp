@@ -27,10 +27,5 @@ export function Card({ children, style }: CardProps) {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    borderRadius: 8,
-    shadowOffset: { width: 10, height: 10 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 4,
   },
 });
