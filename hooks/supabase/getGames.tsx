@@ -66,6 +66,7 @@ export type Game = {
   id: string;
   code: string;
   date: Date;
+  datetime: Date;
   tournament_name: string;
   location: string;
   home_team: Team;
@@ -84,7 +85,8 @@ export const useGetGames = () => {
       const { data, error } = await supabase
         .from("games")
         .select("*")
-        .order("date", { ascending: true });
+        .not('datetime', 'is', null)
+        .order("datetime", { ascending: true });
 
       if (error) {
         console.error("[getGames hook] Error getting games: ", error);

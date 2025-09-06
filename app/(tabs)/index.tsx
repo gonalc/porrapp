@@ -1,5 +1,5 @@
 import { StyleSheet, FlatList, Image } from "react-native";
-import dayjs, { DATE_FORMAT } from "@/utils/dates";
+import dayjs, { DATE_FORMAT, TIME_FORMAT } from "@/utils/dates";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -43,6 +43,9 @@ export default function HomeScreen() {
               <ThemedText type="defaultSemiBold">
                 {dayjs(item.date).format(DATE_FORMAT)}
               </ThemedText>
+              <ThemedText type="defaultSemiBold" style={styles.gameTime}>
+                {dayjs(item.datetime).format(TIME_FORMAT)}
+              </ThemedText>
             </ThemedView>
           </Card>
         )}
@@ -59,6 +62,9 @@ const styles = StyleSheet.create({
     paddingTop: 64,
   },
   title: {
+    textAlign: "center",
+  },
+  gameTime: {
     textAlign: "center",
   },
   gamesContainer: {
