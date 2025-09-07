@@ -8,9 +8,11 @@ import { Separator } from "@/components/Separator";
 
 import dayjs, { DATE_FORMAT } from "@/utils/dates";
 import { GameCard } from "./GameCard";
+import { useRouter } from "expo-router";
 
 export function GamesList() {
   const { games, refreshing, fetchGames } = useGetGames();
+  const router = useRouter();
 
   return (
     <FlatList
@@ -28,7 +30,7 @@ export function GamesList() {
                 </ThemedText>
               </ThemedView>
             )}
-            <GameCard game={item} />
+            <GameCard game={item} onPress={() => router.navigate(`/games/${item.id}`)} />
           </>
         );
       }}
