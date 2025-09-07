@@ -70,7 +70,7 @@ export default function GamePage() {
 
         <ThemedView style={styles.detailsContainer}>
           <View style={styles.detailRow}>
-            <ThemedText style={styles.detailLabel}>🏟️ Venue</ThemedText>
+            <ThemedText style={styles.detailLabel}>🏟️ Estadio</ThemedText>
             <ThemedText style={styles.detailValue}>{game.location}</ThemedText>
           </View>
         </ThemedView>
