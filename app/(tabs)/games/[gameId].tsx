@@ -8,9 +8,9 @@ import { StyleSheet, ScrollView, View } from "react-native";
 
 export default function GamePage() {
   const { gameId } = useLocalSearchParams();
-  const { game } = useGetSingleGame(Array.isArray(gameId) ? gameId[0] : gameId);
+  const { game, refreshing } = useGetSingleGame(Array.isArray(gameId) ? gameId[0] : gameId);
 
-  if (!game) {
+  if (!game || refreshing) {
     return (
       <ThemedView style={styles.container}>
         <ThemedText>Loading...</ThemedText>
