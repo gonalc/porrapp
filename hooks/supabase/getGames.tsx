@@ -32,7 +32,7 @@ type Score = {
   period: Period;
 };
 
-type Team = {
+export type Team = {
   id: string;
   abbName: string;
   fullName: string;
