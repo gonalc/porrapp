@@ -55,6 +55,17 @@ export default function TabLayout() {
         name="account"
         options={{
           title: "Mi cuenta",
+          href: null,
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="person.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="auth"
+        options={{
+          title: "Iniciar sesión",
+          // href: null,
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="person.fill" color={color} />
           ),
