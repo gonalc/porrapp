@@ -1,4 +1,3 @@
-import { isLoaded } from "expo-font";
 import { createContext, useContext } from "react";
 
 type Session = {

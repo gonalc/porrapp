@@ -1,4 +1,4 @@
-import { createRef, useMemo, useRef, useState } from "react";
+import { createRef, useMemo,  useState } from "react";
 import { ThemedView } from "./ThemedView";
 import { Input } from "./Input";
 import { StyleSheet, TextInput } from "react-native";
