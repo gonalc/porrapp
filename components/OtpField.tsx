@@ -1,21 +1,26 @@
-import { createRef, useMemo,  useState } from "react";
+import { createRef, useEffect, useMemo,  useState } from "react";
 import { ThemedView } from "./ThemedView";
 import { Input } from "./Input";
 import { StyleSheet, TextInput } from "react-native";
 
 type OtpFieldProps = {
   digits?: number;
+  onChange: (value: string) => void;
 };
 
 const DEFAULT_OTP_DIGITS = 6;
 
-export function OtpField({ digits = DEFAULT_OTP_DIGITS }: OtpFieldProps) {
+export function OtpField({ digits = DEFAULT_OTP_DIGITS, onChange }: OtpFieldProps) {
   const initialValues = useMemo(
     () => Array.from({ length: digits }).fill(""),
     [digits],
   );
 
   const [otpValues, setOtpValues] = useState(initialValues as string[]);
+
+  useEffect(() => {
+    onChange(otpValues.join(''));
+  }, [otpValues, onChange]);
 
   const inputRefs = useMemo(
     () => Array.from({ length: digits }, () => createRef<TextInput>()),
@@ -26,6 +31,7 @@ export function OtpField({ digits = DEFAULT_OTP_DIGITS }: OtpFieldProps) {
     setOtpValues((previous) => {
       const newValues = [...previous];
       newValues[index] = value;
+
       return newValues;
     });
 

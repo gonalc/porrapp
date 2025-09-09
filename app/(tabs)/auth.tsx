@@ -1,21 +1,25 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { StyleSheet } from "react-native";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { useState } from "react";
 import { Step, useSendOtp } from "@/hooks/supabase/sendOtp";
-import { LoadingButton } from "@/components/LoadingButton";
-import { Input } from "@/components/Input";
-import { OtpField } from "@/components/OtpField";
+import { EmailStep } from "@/components/auth/EmailStep";
+import { OtpStep } from "@/components/auth/OtpStep";
 
 export default function AuthPage() {
-  const [email, setEmail] = useState("");
-  const backgroundColor = useThemeColor({}, "background");
+  const { isLoading, sendOtp, step, verifyOtp, errorMessage } = useSendOtp();
 
-  const { isLoading, sendOtp, step } = useSendOtp();
-
-  const handleSubmit = () => {
-    sendOtp(email);
+  const renderStep = () => {
+    if (step === Step.EMAIL) {
+      return <EmailStep onSubmit={sendOtp} isLoading={isLoading} />;
+    } else {
+      return (
+        <OtpStep
+          onSubmit={verifyOtp}
+          isLoading={isLoading}
+          errorMessage={errorMessage}
+        />
+      );
+    }
   };
 
   return (
@@ -24,27 +28,7 @@ export default function AuthPage() {
         Iniciar sesión
       </ThemedText>
 
-      {step === Step.EMAIL ? (
-        <Input
-          placeholder="Correo electrónico"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-        />
-      ) : (
-        <OtpField />
-      )}
-
-      <LoadingButton onPress={handleSubmit} isLoading={isLoading}>
-        <ThemedText
-          style={{
-            color: backgroundColor,
-          }}
-          type="defaultSemiBold"
-        >
-          Confirmar
-        </ThemedText>
-      </LoadingButton>
+      {renderStep()}
     </ThemedView>
   );
 }
