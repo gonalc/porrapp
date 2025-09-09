@@ -7,9 +7,11 @@ import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { useSession } from "@/contexts/session";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { data: session } = useSession();
 
   return (
     <Tabs
@@ -55,7 +57,7 @@ export default function TabLayout() {
         name="account"
         options={{
           title: "Mi cuenta",
-          href: null,
+          href: !session ? null : undefined,
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="person.fill" color={color} />
           ),
@@ -65,7 +67,7 @@ export default function TabLayout() {
         name="auth"
         options={{
           title: "Iniciar sesión",
-          // href: null,
+          href: !!session ? null : undefined,
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="person.fill" color={color} />
           ),

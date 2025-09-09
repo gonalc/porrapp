@@ -1,3 +1,4 @@
+import { useSession } from "@/contexts/session";
 import { supabase } from "@/services/supabase";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
@@ -9,6 +10,7 @@ export enum Step {
 
 export const useSendOtp = () => {
   const router = useRouter();
+  const { setSession } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState<string>("");
@@ -36,13 +38,14 @@ export const useSendOtp = () => {
     async (otp: string) => {
       setIsLoading(true);
 
-      const { error } = await supabase.auth.verifyOtp({
+      const { error, data: { session } } = await supabase.auth.verifyOtp({
         email,
         token: otp,
         type: "email",
       });
 
       if (!error) {
+        setSession(session);
         return router.replace("/");
       }
 

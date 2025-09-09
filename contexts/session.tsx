@@ -1,26 +1,50 @@
-import { createContext, useContext } from "react";
+import { supabase } from "@/services/supabase";
+import { type AuthSession } from "@supabase/supabase-js";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type Session = {
   isLoading: boolean;
-  data: {
-    user: unknown | null;
-    session: string | null;
-  }
-}
+  data: AuthSession | null;
+  setSession: Dispatch<SetStateAction<AuthSession | null>>;
+};
 
 const SessionContext = createContext<Session | null>(null);
 
-export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
-  const session = {
-    isLoading: true,
-    data: {
-      user: null,
-      session: null,
-    }
-  };
+export const SessionProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState<AuthSession | null>(null);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      setLoading(true);
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Error fetching session: ", error);
+      } else {
+        setSession(data.session);
+      }
+
+      setLoading(false);
+    };
+
+    fetchSession();
+  }, []);
 
   return (
-    <SessionContext.Provider value={session}>
+    <SessionContext.Provider
+      value={{ isLoading: loading, data: session, setSession }}
+    >
       {children}
     </SessionContext.Provider>
   );
