@@ -53,7 +53,7 @@ export const useSendOtp = () => {
 
       setIsLoading(false);
     },
-    [email, router],
+    [email, router, setSession],
   );
 
   return { sendOtp, isLoading, otp, setOtp, step, verifyOtp, errorMessage };
