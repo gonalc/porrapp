@@ -73,7 +73,7 @@ export type Game = {
   away_team: Team;
   match_day: string;
   season: string;
-  status: 'Finalizado' | 'Sin comenzar' | (string & {});
+  status: 'Finalizado' | 'Sin comenzar' | 'En juego' | (string & {});
   score: Score;
 };
 

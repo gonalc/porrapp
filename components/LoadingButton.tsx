@@ -5,7 +5,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 type LoadingButtonProps = PropsWithChildren<{
   isLoading: boolean;
   onPress: () => void;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "background";
   disabled?: boolean;
 }>;
 

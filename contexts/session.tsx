@@ -38,6 +38,10 @@ export const SessionProvider = ({
       setLoading(false);
     };
 
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
     fetchSession();
   }, []);
 
