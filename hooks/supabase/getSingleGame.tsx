@@ -11,7 +11,7 @@ export const useGetSingleGame = (gameId: string) => {
     const { data, error } = await supabase
       .from("games")
       .select("*")
-      .eq("id", gameId)
+      .eq("code", gameId)
       .single();
 
     if (error) {

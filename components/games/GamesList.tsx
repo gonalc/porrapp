@@ -30,7 +30,7 @@ export function GamesList() {
                 </ThemedText>
               </ThemedView>
             )}
-            <GameCard game={item} onPress={() => router.navigate(`/games/${item.id}`)} />
+            <GameCard game={item} onPress={() => router.navigate(`/games/${item.code}`)} />
           </>
         );
       }}
