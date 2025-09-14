@@ -9,7 +9,6 @@ import { LoadingButton } from "@/components/LoadingButton";
 import { supabase } from "@/services/supabase";
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { storage } from "@/services/storage";
 
 export default function AccountScreen() {
   const { data } = useSession();
