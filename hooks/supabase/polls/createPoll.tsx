@@ -1,26 +1,22 @@
 import { supabase } from "@/services/supabase";
 import { useCallback, useState } from "react";
 import { useSession } from "@/contexts/session";
-
-export type Guess = {
-  homeTeamScore: number;
-  awayTeamScore: number;
-};
+import { type MatchResult } from "@/components/MatchResultModal";
 
 export const useCreatePoll = () => {
   const { data: session } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [guess, setGuess] = useState<Guess>({
-    homeTeamScore: 0,
-    awayTeamScore: 0,
+  const [guess, setGuess] = useState<MatchResult>({
+    homeScore: "0",
+    awayScore: "0",
   });
 
   const userId = session?.user.id;
 
   const createPoll = useCallback(
-    async (gameCode: string, firstGuess: Guess) => {
+    async (gameCode: string, firstGuess: MatchResult) => {
       try {
         setIsLoading(true);
         const { data, error } = await supabase
@@ -37,25 +33,19 @@ export const useCreatePoll = () => {
 
           throw new Error("Failed to create poll");
         }
-        console.log("Poll created successfully:", data);
 
-        const { data: guessData, error: guessError } = await supabase
-          .from("guesses")
-          .insert({
-            poll_id: data.id,
-            home_team_score: firstGuess.homeTeamScore,
-            away_team_score: firstGuess.awayTeamScore,
-            game_code: gameCode,
-          })
-          .select()
-          .single();
+        const { error: guessError } = await supabase.from("guesses").insert({
+          poll_id: data.id,
+          home_team_score: firstGuess.homeScore,
+          away_team_score: firstGuess.awayScore,
+          game_code: gameCode,
+        });
 
         if (guessError) {
-          console.error("Error creating guess:", guessError);
-
           throw new Error("Failed to create guess");
         }
-        console.log("Guess created successfully:", guessData);
+
+        closeModal();
       } catch (error) {
         console.error("Unexpected error:", error);
         throw error;

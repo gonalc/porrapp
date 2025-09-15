@@ -76,7 +76,7 @@ export default function GamePage() {
           </View>
         </ThemedView>
 
-        <PollJoiner />
+        <PollJoiner gameCode={game.code} />
       </ThemedView>
     </ScrollView>
   );

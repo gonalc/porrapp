@@ -1,11 +1,12 @@
-import { Modal, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { LoadingButton } from "./LoadingButton";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
+import { MatchResultModal, type MatchResult } from "./MatchResultModal";
 import { useCreatePoll } from "@/hooks/supabase/polls/createPoll";
 
 type PollJoinerProps = {
-  gameCode?: string;
+  gameCode: string;
 };
 
 export function PollJoiner({ gameCode }: PollJoinerProps) {
@@ -14,7 +15,12 @@ export function PollJoiner({ gameCode }: PollJoinerProps) {
     startPollCreation,
     isModalOpen,
     closeModal,
+    createPoll
   } = useCreatePoll();
+
+  const handleMatchResultSubmit = (result: MatchResult) => {
+    createPoll(gameCode, result)
+  };
 
   const buttonStyles: StyleProp<ViewStyle> = {
     width: "auto",
@@ -43,18 +49,12 @@ export function PollJoiner({ gameCode }: PollJoinerProps) {
         <ThemedText type="defaultSemiBold">Crear porra</ThemedText>
       </LoadingButton>
 
-      <Modal
-        animationType="fade"
-        transparent
+      <MatchResultModal
         visible={isModalOpen}
-        onRequestClose={closeModal}
-      >
-        <ThemedView style={styles.modalContainer}>
-          <ThemedView style={styles.modalContent}>
-            <ThemedText type="defaultSemiBold">Crear porra</ThemedText>
-          </ThemedView>
-        </ThemedView>
-      </Modal>
+        onClose={closeModal}
+        onSubmit={handleMatchResultSubmit}
+        isLoading={isCreatingPoll}
+      />
     </ThemedView>
   );
 }
@@ -64,16 +64,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
     marginVertical: 16,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    padding: 16,
-    backgroundColor: "white",
-    borderRadius: 8,
   },
 });
