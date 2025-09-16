@@ -1,15 +1,17 @@
 import { TeamCard } from "@/components/games/TeamCard";
 import { PollJoiner } from "@/components/PollJoiner";
+import { PollList } from "@/components/polls/PollList";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useGetSingleGame } from "@/hooks/supabase/getSingleGame";
 import dayjs, { DATE_FORMAT, TIME_FORMAT } from "@/utils/dates";
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet, ScrollView, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function GamePage() {
   const { gameId } = useLocalSearchParams();
-  const { game, refreshing } = useGetSingleGame(Array.isArray(gameId) ? gameId[0] : gameId);
+  const gameCode = Array.isArray(gameId) ? gameId[0] : gameId;
+  const { game, refreshing } = useGetSingleGame(gameCode);
 
   if (!game || refreshing) {
     return (
@@ -22,7 +24,7 @@ export default function GamePage() {
   const isFinished = game.status === "Finalizado";
 
   return (
-    <ScrollView style={styles.scrollView}>
+    <ThemedView style={styles.scrollView}>
       <ThemedView style={styles.container}>
         <ThemedView style={styles.tournamentHeader}>
           <ThemedText type="defaultSemiBold" style={styles.tournamentName}>
@@ -77,8 +79,10 @@ export default function GamePage() {
         </ThemedView>
 
         <PollJoiner gameCode={game.code} />
+
+        <PollList gameCode={game.code} />
       </ThemedView>
-    </ScrollView>
+    </ThemedView>
   );
 }
 
