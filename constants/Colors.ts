@@ -41,7 +41,13 @@ export const Colors = {
      *
      * @description Error messages, warnings or validation prompts.
      */
-    warning: '#FF9500'
+    warning: '#FF9500',
+    /**
+     * Soft White
+     *
+     * @description Surface color for cards, dialogs, and other UI elements.
+     */
+    surface: '#F1F3F5',
   },
   dark: {
     /**
@@ -85,6 +91,12 @@ export const Colors = {
      *
      * @description Error messages, warnings or validation prompts.
      */
-    warning: '#FFB900'
+    warning: '#FFB900',
+    /**
+     * Slightly Lighter Slate
+     *
+     * @description Surface color for cards, dialogs, and other UI elements.
+     */
+    surface: '#242F30',
   },
 };

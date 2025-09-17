@@ -2,14 +2,14 @@ import { supabase } from "@/services/supabase";
 import { type QueryData } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
 
-type Guess = {
+export type Guess = {
   id: string;
   home_team_score: number;
   away_team_score: number;
   author: string;
 };
 
-type Poll = {
+export type Poll = {
   id: string;
   game_code: string;
   author: string;
