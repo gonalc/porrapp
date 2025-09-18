@@ -64,6 +64,7 @@ export function MatchResultModal({
             style={styles.scoreInput}
             testID="home-score-input"
             placeholder="0"
+            autoFocus
           />
         </ThemedView>
 

@@ -1,6 +1,5 @@
 import { TeamCard } from "@/components/games/TeamCard";
-import { PollJoiner } from "@/components/PollJoiner";
-import { PollList } from "@/components/polls/PollList";
+import { Polls } from "@/components/polls/Polls";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useGetSingleGame } from "@/hooks/supabase/getSingleGame";
@@ -78,9 +77,7 @@ export default function GamePage() {
           </View>
         </ThemedView>
 
-        <PollJoiner gameCode={game.code} />
-
-        <PollList gameCode={game.code} />
+        <Polls gameCode={game.code} />
       </ThemedView>
     </ThemedView>
   );

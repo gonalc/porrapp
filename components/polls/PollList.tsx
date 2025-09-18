@@ -1,16 +1,13 @@
 import { ThemedView } from "@/components/ThemedView";
-import { type Poll, useGetPolls } from "@/hooks/supabase/polls/getPolls";
+import { type Poll } from "@/hooks/supabase/polls/getPolls";
 import { FlatList } from "react-native";
 import { PollCard } from "./PollCard";
 import { SharePollModal } from "./SharePollModal";
 import { useState } from "react";
+import { usePollsContext } from "@/contexts/polls";
 
-type PollListProps = {
-  gameCode: string;
-};
-
-export function PollList({ gameCode }: PollListProps) {
-  const { polls, isLoading, fetchPolls } = useGetPolls(gameCode);
+export function PollList() {
+  const { polls, isFetchingPolls, fetchPolls } = usePollsContext();
 
   const [selectedPoll, setSelectedPoll] = useState<Poll | null>(null);
 
@@ -23,7 +20,7 @@ export function PollList({ gameCode }: PollListProps) {
         )}
         keyExtractor={(item) => item.id}
         onRefresh={fetchPolls}
-        refreshing={isLoading}
+        refreshing={isFetchingPolls}
       />
       <SharePollModal
         visible={!!selectedPoll}

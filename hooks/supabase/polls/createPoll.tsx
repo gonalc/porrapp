@@ -2,16 +2,24 @@ import { supabase } from "@/services/supabase";
 import { useCallback, useState } from "react";
 import { useSession } from "@/contexts/session";
 import { type MatchResult } from "@/components/MatchResultModal";
+import { type Poll } from "./getPolls";
+
+export enum CreatePollStep {
+  MODAL_CLOSED,
+  INSERT_GUESS,
+  SHARE_CODE,
+}
 
 export const useCreatePoll = () => {
   const { data: session } = useSession();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [creationStep, setCreationStep] = useState(CreatePollStep.MODAL_CLOSED);
   const [guess, setGuess] = useState<MatchResult>({
     homeScore: "0",
     awayScore: "0",
   });
+  const [poll, setPoll] = useState<Poll | null>(null);
 
   const userId = session?.user.id;
 
@@ -34,6 +42,8 @@ export const useCreatePoll = () => {
           throw new Error("Failed to create poll");
         }
 
+        setPoll(data);
+
         const { error: guessError } = await supabase.from("guesses").insert({
           poll_id: data.id,
           home_team_score: firstGuess.homeScore,
@@ -46,7 +56,7 @@ export const useCreatePoll = () => {
           throw new Error("Failed to create guess");
         }
 
-        closeModal();
+        setCreationStep(CreatePollStep.SHARE_CODE);
       } catch (error) {
         console.error("Unexpected error:", error);
         throw error;
@@ -58,11 +68,16 @@ export const useCreatePoll = () => {
   );
 
   const startPollCreation = () => {
-    setIsModalOpen(true);
+    setCreationStep(CreatePollStep.INSERT_GUESS);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setCreationStep(CreatePollStep.MODAL_CLOSED);
+    setPoll(null);
+    setGuess({
+      homeScore: "0",
+      awayScore: "0",
+    });
   };
 
   return {
@@ -71,7 +86,8 @@ export const useCreatePoll = () => {
     startPollCreation,
     setGuess,
     guess,
-    isModalOpen,
     closeModal,
+    poll,
+    creationStep,
   };
 };

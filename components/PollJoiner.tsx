@@ -2,25 +2,20 @@ import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { LoadingButton } from "./LoadingButton";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { MatchResultModal, type MatchResult } from "./MatchResultModal";
-import { useCreatePoll } from "@/hooks/supabase/polls/createPoll";
+import { MatchResultModal } from "./MatchResultModal";
+import { CreatePollStep } from "@/hooks/supabase/polls/createPoll";
+import { SharePollModal } from "./polls/SharePollModal";
+import { usePollsContext } from "@/contexts/polls";
 
-type PollJoinerProps = {
-  gameCode: string;
-};
-
-export function PollJoiner({ gameCode }: PollJoinerProps) {
+export function PollJoiner() {
   const {
-    isLoading: isCreatingPoll,
     startPollCreation,
-    isModalOpen,
+    isCreatingPoll,
+    creationStep,
     closeModal,
-    createPoll,
-  } = useCreatePoll();
-
-  const handleMatchResultSubmit = (result: MatchResult) => {
-    createPoll(gameCode, result);
-  };
+    onCreatePoll,
+    createdPoll,
+  } = usePollsContext();
 
   const buttonStyles: StyleProp<ViewStyle> = {
     width: "auto",
@@ -50,10 +45,16 @@ export function PollJoiner({ gameCode }: PollJoinerProps) {
       </LoadingButton>
 
       <MatchResultModal
-        visible={isModalOpen}
+        visible={creationStep === CreatePollStep.INSERT_GUESS}
         onClose={closeModal}
-        onSubmit={handleMatchResultSubmit}
+        onSubmit={onCreatePoll}
         isLoading={isCreatingPoll}
+      />
+
+      <SharePollModal
+        visible={creationStep === CreatePollStep.SHARE_CODE}
+        onClose={closeModal}
+        poll={createdPoll}
       />
     </ThemedView>
   );
