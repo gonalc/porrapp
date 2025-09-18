@@ -23,7 +23,7 @@ export function GameCard({ game, onPress }: GameCardProps) {
         <ThemedView style={styles.teamsSide}>
           <ThemedView style={styles.teamContainer}>
             <Image
-              source={{ uri: game.home_team.imageUrl }}
+              source={{ uri: game.home_team.imageUrlSizes.M }}
               style={styles.teamBadge}
             />
             <ThemedText type="defaultSemiBold">
@@ -32,7 +32,7 @@ export function GameCard({ game, onPress }: GameCardProps) {
           </ThemedView>
           <ThemedView style={styles.teamContainer}>
             <Image
-              source={{ uri: game.away_team.imageUrl }}
+              source={{ uri: game.away_team.imageUrlSizes.M }}
               style={styles.teamBadge}
             />
             <ThemedText type="defaultSemiBold">

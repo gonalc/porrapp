@@ -20,7 +20,8 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   'person.fill': 'person',
   'envelope.fill': 'email',
-  'person.badge.plus': 'person-add'
+  'person.badge.plus': 'person-add',
+  'shared.with.you': 'share'
 } as IconMapping;
 
 /**

@@ -17,7 +17,7 @@ export function TeamCard({ team }: TeamCardProps) {
       style={[styles.teamContainer, { backgroundColor: neutralSupportColor }]}
     >
       <Image
-        source={{ uri: team.imageUrlSizes.M }}
+        source={{ uri: team.imageUrlSizes.L }}
         style={styles.teamLogo}
       />
       <ThemedText type="defaultSemiBold" style={styles.teamName}>

@@ -3,6 +3,8 @@ import { ThemedText } from "@/components/ThemedText";
 import { type Poll } from "@/hooks/supabase/polls/getPolls";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet, TouchableOpacity } from "react-native";
+import { LoadingButton } from "../LoadingButton";
+import { IconSymbol } from "../ui/IconSymbol";
 
 type SharePollModalProps = {
   visible: boolean;
@@ -17,6 +19,7 @@ export function SharePollModal({
 }: SharePollModalProps) {
   const backgroundColor = useThemeColor({}, "background");
   const neutralSupportColor = useThemeColor({}, "neutralSupport");
+  const textColor = useThemeColor({}, "text");
 
   if (!poll) return null;
 
@@ -42,9 +45,20 @@ export function SharePollModal({
         </ThemedText>
       </TouchableOpacity>
 
-      <ThemedText style={styles.caption}>
+      {/*<ThemedText style={styles.caption}>
         Toca el código para copiarlo
-      </ThemedText>
+      </ThemedText>*/}
+
+      <Modal.ModalActions>
+        <LoadingButton
+          isLoading={false}
+          onPress={() => alert("Sharing!")}
+          style={styles.shareButton}
+        >
+          <IconSymbol name="shared.with.you" color={textColor} />
+          <ThemedText type="defaultSemiBold">Compartir</ThemedText>
+        </LoadingButton>
+      </Modal.ModalActions>
     </Modal>
   );
 }
@@ -60,5 +74,10 @@ const styles = StyleSheet.create({
   },
   caption: {
     textAlign: "center",
+  },
+  shareButton: {
+    flexDirection: "row",
+    gap: 8,
+    marginTop: 16,
   },
 });
