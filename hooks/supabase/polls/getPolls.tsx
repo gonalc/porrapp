@@ -14,6 +14,7 @@ export type Poll = {
   game_code: string;
   author: string;
   guesses: Guess[];
+  code: string;
 };
 
 export const useGetPolls = (gameCode: string) => {
@@ -30,6 +31,7 @@ export const useGetPolls = (gameCode: string) => {
       id,
       game_code,
       author,
+      code,
       guesses (
         id,
         home_team_score,

@@ -39,6 +39,7 @@ export const useCreatePoll = () => {
           home_team_score: firstGuess.homeScore,
           away_team_score: firstGuess.awayScore,
           game_code: gameCode,
+          author: userId,
         });
 
         if (guessError) {

@@ -15,11 +15,11 @@ export function PollJoiner({ gameCode }: PollJoinerProps) {
     startPollCreation,
     isModalOpen,
     closeModal,
-    createPoll
+    createPoll,
   } = useCreatePoll();
 
   const handleMatchResultSubmit = (result: MatchResult) => {
-    createPoll(gameCode, result)
+    createPoll(gameCode, result);
   };
 
   const buttonStyles: StyleProp<ViewStyle> = {

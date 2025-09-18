@@ -61,7 +61,7 @@ export function MatchResultModal({
           <TouchableWithoutFeedback onPress={() => {}}>
             <ThemedView style={styles.modalContent}>
               <ThemedText type="defaultSemiBold" style={styles.modalTitle}>
-                Ingresa el resultado del partido
+                Introduce el resultado del partido
               </ThemedText>
 
               <ThemedView style={styles.inputContainer}>
