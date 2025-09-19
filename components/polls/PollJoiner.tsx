@@ -1,11 +1,13 @@
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
-import { LoadingButton } from "./LoadingButton";
-import { ThemedText } from "./ThemedText";
-import { ThemedView } from "./ThemedView";
-import { MatchResultModal } from "./MatchResultModal";
+import { LoadingButton } from "../LoadingButton";
+import { ThemedText } from "../ThemedText";
+import { ThemedView } from "../ThemedView";
+import { MatchResultModal } from "../MatchResultModal";
 import { CreatePollStep } from "@/hooks/supabase/polls/createPoll";
-import { SharePollModal } from "./polls/SharePollModal";
+import { SharePollModal } from "./SharePollModal";
 import { usePollsContext } from "@/contexts/polls";
+import { JoinPollModal } from "./JoinPollModal";
+import { useState } from "react";
 
 export function PollJoiner() {
   const {
@@ -16,6 +18,8 @@ export function PollJoiner() {
     onCreatePoll,
     createdPoll,
   } = usePollsContext();
+
+  const [joinPollModalVisible, setJoinPollModalVisible] = useState(false);
 
   const buttonStyles: StyleProp<ViewStyle> = {
     width: "auto",
@@ -28,7 +32,7 @@ export function PollJoiner() {
   return (
     <ThemedView style={styles.container}>
       <LoadingButton
-        onPress={() => alert("Join poll")}
+        onPress={() => setJoinPollModalVisible(true)}
         isLoading={false}
         variant="secondary"
         style={buttonStyles}
@@ -55,6 +59,11 @@ export function PollJoiner() {
         visible={creationStep === CreatePollStep.SHARE_CODE}
         onClose={closeModal}
         poll={createdPoll}
+      />
+
+      <JoinPollModal
+        visible={joinPollModalVisible}
+        onClose={() => setJoinPollModalVisible(false)}
       />
     </ThemedView>
   );

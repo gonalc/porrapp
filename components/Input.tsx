@@ -25,6 +25,7 @@ export function Input({
   keyboardType,
   maxLength,
   style = {},
+  autoCapitalize = 'none',
   ref,
 }: InputProps) {
   const textColor = useThemeColor({}, "text");
@@ -48,7 +49,7 @@ export function Input({
       value={value}
       onChangeText={onChangeText}
       keyboardType={keyboardType}
-      autoCapitalize="none"
+      autoCapitalize={autoCapitalize}
       autoCorrect={false}
       maxLength={maxLength}
     />

@@ -1,4 +1,4 @@
-import { PollJoiner } from "@/components/PollJoiner";
+import { PollJoiner } from "@/components/polls/PollJoiner";
 import { PollList } from "@/components/polls/PollList";
 import { PollsContextProvider } from "@/contexts/polls";
 import { type Game } from "@/hooks/supabase/games/getGames";
