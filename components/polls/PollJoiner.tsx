@@ -1,8 +1,8 @@
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
-import { LoadingButton } from "../LoadingButton";
-import { ThemedText } from "../ThemedText";
-import { ThemedView } from "../ThemedView";
-import { MatchResultModal } from "../MatchResultModal";
+import { LoadingButton } from "@/components/LoadingButton";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { MatchResultModal } from "@/components/MatchResultModal";
 import { CreatePollStep } from "@/hooks/supabase/polls/createPoll";
 import { SharePollModal } from "./SharePollModal";
 import { usePollsContext } from "@/contexts/polls";
