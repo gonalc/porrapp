@@ -45,12 +45,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="polls"
+        name="polls/index"
         options={{
           title: "Porras",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="polls/[pollId]"
+        options={{
+          href: null
         }}
       />
       <Tabs.Screen

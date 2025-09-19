@@ -5,8 +5,11 @@ import { PollCard } from "./PollCard";
 import { SharePollModal } from "./SharePollModal";
 import { useState } from "react";
 import { usePollsContext } from "@/contexts/polls";
+import { useRouter } from "expo-router";
 
 export function PollList() {
+  const router = useRouter();
+
   const { polls, isFetchingPolls, fetchPolls } = usePollsContext();
 
   const [selectedPoll, setSelectedPoll] = useState<Poll | null>(null);
@@ -16,7 +19,11 @@ export function PollList() {
       <FlatList
         data={polls}
         renderItem={({ item }) => (
-          <PollCard poll={item} onLongPress={() => setSelectedPoll(item)} />
+          <PollCard
+            poll={item}
+            onLongPress={() => setSelectedPoll(item)}
+            onPress={() => router.push(`/polls/${item.id}`)}
+          />
         )}
         keyExtractor={(item) => item.id}
         onRefresh={fetchPolls}

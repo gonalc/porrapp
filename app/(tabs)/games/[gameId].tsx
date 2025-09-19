@@ -22,6 +22,7 @@ export default function GamePage() {
   }
 
   const isFinished = game.status === "Finalizado";
+  const isLive = game.status === "En juego";
 
   return (
     <ThemedView style={styles.scrollView}>
@@ -43,7 +44,7 @@ export default function GamePage() {
               style={styles.gameDateTime}
               type="caption"
             >{`${dayjs(game.date).format(DATE_FORMAT)} ${dayjs(game.datetime).format(TIME_FORMAT)}`}</ThemedText>
-            {isFinished ? (
+            {isFinished || isLive ? (
               <>
                 <View style={styles.scoreBox}>
                   <ThemedText type="title" style={styles.scoreText}>

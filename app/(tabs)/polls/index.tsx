@@ -6,7 +6,7 @@ import { ThemedView } from '@/components/ThemedView';
 export default function PollsScreen() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">Porras!</ThemedText>
+      <ThemedText type="title">Nuevas Porras!</ThemedText>
     </ThemedView>
   );
 }

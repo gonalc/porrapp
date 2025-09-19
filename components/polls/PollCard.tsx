@@ -9,9 +9,10 @@ import { useMemo } from "react";
 type PollCardProps = {
   poll: Poll;
   onLongPress?: () => void;
+  onPress?: () => void;
 };
 
-export function PollCard({ poll, onLongPress = () => {} }: PollCardProps) {
+export function PollCard({ poll, onLongPress = () => {}, onPress }: PollCardProps) {
   const surfaceColor = useThemeColor({}, "surface");
   const { data: session } = useSession();
 
@@ -25,7 +26,7 @@ export function PollCard({ poll, onLongPress = () => {} }: PollCardProps) {
   }
 
   return (
-    <TouchableOpacity onLongPress={onLongPress}>
+    <TouchableOpacity onLongPress={onLongPress} onPress={onPress}>
       <ThemedView style={[styles.container, { backgroundColor: surfaceColor }]}>
         <ThemedText type="defaultSemiBold" style={styles.myGuess}>
           {myGuess.home_team_score} - {myGuess.away_team_score}
