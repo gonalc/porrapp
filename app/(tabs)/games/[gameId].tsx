@@ -77,7 +77,7 @@ export default function GamePage() {
           </View>
         </ThemedView>
 
-        <Polls gameCode={game.code} />
+        <Polls game={game} />
       </ThemedView>
     </ThemedView>
   );

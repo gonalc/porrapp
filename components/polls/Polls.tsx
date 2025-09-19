@@ -1,14 +1,15 @@
 import { PollJoiner } from "@/components/PollJoiner";
 import { PollList } from "@/components/polls/PollList";
 import { PollsContextProvider } from "@/contexts/polls";
+import { type Game } from "@/hooks/supabase/games/getGames";
 
 type PollsProps = {
-  gameCode: string;
+  game: Game;
 };
 
-export function Polls({ gameCode }: PollsProps) {
+export function Polls({ game }: PollsProps) {
   return (
-    <PollsContextProvider gameCode={gameCode}>
+    <PollsContextProvider game={game}>
       <PollJoiner />
 
       <PollList />

@@ -1,4 +1,5 @@
 import { type MatchResult } from "@/components/MatchResultModal";
+import { type Game } from "@/hooks/supabase/games/getGames";
 import {
   CreatePollStep,
   useCreatePoll,
@@ -16,17 +17,18 @@ type PollsContextType = {
   isFetchingPolls: boolean;
   isCreatingPoll: boolean;
   closeModal: () => void;
+  game: Game;
 };
 
 type PollsProviderProps = PropsWithChildren<{
-  gameCode: string;
+  game: Game;
 }>;
 
 const PollsContext = createContext<PollsContextType | null>(null);
 
 export const PollsContextProvider = ({
   children,
-  gameCode,
+  game,
 }: PollsProviderProps) => {
   const {
     isLoading: isCreatingPoll,
@@ -40,10 +42,10 @@ export const PollsContextProvider = ({
     polls,
     isLoading: isFetchingPolls,
     fetchPolls,
-  } = useGetPolls(gameCode);
+  } = useGetPolls(game.code);
 
   const onCreatePoll = async (result: MatchResult) => {
-    await createPoll(gameCode, result);
+    await createPoll(game.code, result);
     await fetchPolls();
   };
 
@@ -59,6 +61,7 @@ export const PollsContextProvider = ({
         isCreatingPoll,
         createdPoll,
         closeModal,
+        game,
       }}
     >
       {children}
