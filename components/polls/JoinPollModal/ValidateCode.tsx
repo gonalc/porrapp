@@ -1,25 +1,29 @@
+import { Input } from "@/components/Input";
+import { LoadingButton } from "@/components/LoadingButton";
 import { Modal } from "@/components/Modal";
 import { ThemedText } from "@/components/ThemedText";
-import { Input } from "@/components/Input";
-import { useState } from "react";
-import { StyleSheet } from "react-native";
-import { LoadingButton } from "@/components/LoadingButton";
-import { useValidateCode } from "@/hooks/supabase/polls/validateCode";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { StyleSheet } from "react-native";
 
-type JoinModalProps = {
-  visible: boolean;
-  onClose: () => void;
+type ValidateCodeProps = {
+  code: string;
+  setCode: (value: string) => void;
+  validateCode: (code: string) => Promise<void>;
+  isValidating: boolean;
+  validationError: string | null;
 };
 
-export function JoinPollModal({ visible, onClose }: JoinModalProps) {
+export function ValidateCode({
+  code,
+  setCode,
+  validateCode,
+  isValidating,
+  validationError,
+}: ValidateCodeProps) {
   const warningColor = useThemeColor({}, "warning");
 
-  const [code, setCode] = useState("");
-  const { isValidating, validateCode, validationError } = useValidateCode();
-
   return (
-    <Modal visible={visible} onRequestClose={onClose}>
+    <>
       <ThemedText type="defaultSemiBold">Unirme a una porra</ThemedText>
       <ThemedText>Introduce el código de la porra.</ThemedText>
 
@@ -47,7 +51,7 @@ export function JoinPollModal({ visible, onClose }: JoinModalProps) {
           <ThemedText type="defaultSemiBold">Unirse</ThemedText>
         </LoadingButton>
       </Modal.ModalActions>
-    </Modal>
+    </>
   );
 }
 

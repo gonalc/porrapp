@@ -1,9 +1,18 @@
 import { supabase } from "@/services/supabase";
 import { useCallback, useState } from "react";
 
+export enum JoinPollSteps {
+  CODE_VALIDATION,
+  ENTERING_RESULT,
+}
+
 export const useValidateCode = () => {
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [validatedCode, setValidatedCode] = useState<string | null>(null);
+  const [joinPollStep, setJoinPollStep] = useState<JoinPollSteps>(
+    JoinPollSteps.CODE_VALIDATION,
+  );
 
   const validateCode = useCallback(async (code: string) => {
     setIsValidating(true);
@@ -23,7 +32,8 @@ export const useValidateCode = () => {
         return;
       }
 
-      console.log("Code validated successfully: ", code);
+      setValidatedCode(code);
+      setJoinPollStep(JoinPollSteps.ENTERING_RESULT);
       return data;
     } catch (error) {
       console.error("Error validating code: ", error);
@@ -33,5 +43,5 @@ export const useValidateCode = () => {
     }
   }, []);
 
-  return { validateCode, isValidating, validationError };
+  return { validateCode, isValidating, validationError, joinPollStep };
 };
