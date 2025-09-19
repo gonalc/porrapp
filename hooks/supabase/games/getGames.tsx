@@ -1,4 +1,5 @@
 import { supabase } from "@/services/supabase";
+import dayjs from "@/utils/dates";
 import { useCallback, useEffect, useState } from "react";
 
 type AlternateNames = {
@@ -83,9 +84,13 @@ export const useGetGames = () => {
 
   const fetchGames = useCallback(async () => {
     setRefreshing(true);
+
+    const yesterday = dayjs().subtract(1, 'day').toISOString();
+
     const { data, error } = await supabase
       .from("games")
       .select("*")
+      .filter("datetime", "gte", yesterday)
       .not('datetime', 'is', null)
       .order("datetime", { ascending: true });
 
