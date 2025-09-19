@@ -6,6 +6,7 @@ import {
 } from "@/hooks/supabase/polls/createPoll";
 import { Poll, useGetPolls } from "@/hooks/supabase/polls/getPolls";
 import { createContext, type PropsWithChildren, useContext } from "react";
+import { useSession } from "./session";
 
 type PollsContextType = {
   polls: Poll[];
@@ -30,6 +31,8 @@ export const PollsContextProvider = ({
   children,
   game,
 }: PollsProviderProps) => {
+  const { data: session } = useSession();
+
   const {
     isLoading: isCreatingPoll,
     startPollCreation,
@@ -42,7 +45,7 @@ export const PollsContextProvider = ({
     polls,
     isLoading: isFetchingPolls,
     fetchPolls,
-  } = useGetPolls(game.code);
+  } = useGetPolls(game.code, session?.user?.id || '');
 
   const onCreatePoll = async (result: MatchResult) => {
     await createPoll(game.code, result);

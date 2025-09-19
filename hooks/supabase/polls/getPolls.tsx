@@ -17,7 +17,7 @@ export type Poll = {
   code: string;
 };
 
-export const useGetPolls = (gameCode: string) => {
+export const useGetPolls = (gameCode: string, userId: string) => {
   const [polls, setPolls] = useState<Poll[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +40,8 @@ export const useGetPolls = (gameCode: string) => {
       )
     `,
       )
-      .eq("game_code", gameCode);
+      .eq("game_code", gameCode)
+      .eq("guesses.author", userId);
 
     type Polls = QueryData<typeof getPollsQuery>;
 
@@ -60,7 +61,7 @@ export const useGetPolls = (gameCode: string) => {
     setPolls(polls);
 
     return polls;
-  }, [gameCode]);
+  }, [gameCode, userId]);
 
   useEffect(() => {
     fetchPolls();
