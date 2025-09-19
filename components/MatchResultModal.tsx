@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
-import { Input } from "./Input";
 import { LoadingButton } from "./LoadingButton";
 import { ThemedText } from "./ThemedText";
-import { ThemedView } from "./ThemedView";
 import { Modal } from "@/components/Modal";
+import { GameResultInput } from "./games/GameResultInput";
 
 export type MatchResult = {
   homeScore: string;
@@ -51,42 +50,14 @@ export function MatchResultModal({
         Introduce el resultado del partido
       </ThemedText>
 
-      <ThemedView style={styles.inputContainer}>
-        <ThemedView style={styles.scoreInputWrapper}>
-          <ThemedText type="default" style={styles.teamLabel}>
-            {homeTeamName}
-          </ThemedText>
-          <Input
-            value={homeScore}
-            onChangeText={setHomeScore}
-            keyboardType="numeric"
-            maxLength={2}
-            style={styles.scoreInput}
-            testID="home-score-input"
-            placeholder="0"
-            autoFocus
-          />
-        </ThemedView>
-
-        <ThemedText type="title" style={styles.vs}>
-          VS
-        </ThemedText>
-
-        <ThemedView style={styles.scoreInputWrapper}>
-          <ThemedText type="default" style={styles.teamLabel}>
-            {awayTeamName}
-          </ThemedText>
-          <Input
-            value={awayScore}
-            onChangeText={setAwayScore}
-            keyboardType="numeric"
-            maxLength={2}
-            style={styles.scoreInput}
-            testID="away-score-input"
-            placeholder="0"
-          />
-        </ThemedView>
-      </ThemedView>
+      <GameResultInput
+        homeScore={homeScore}
+        awayScore={awayScore}
+        setHomeScore={setHomeScore}
+        setAwayScore={setAwayScore}
+        homeTeamName={homeTeamName}
+        awayTeamName={awayTeamName}
+      />
 
       <Modal.ModalActions>
         <LoadingButton
@@ -117,33 +88,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: "center",
     fontSize: 18,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 32,
-    gap: 16,
-  },
-  scoreInputWrapper: {
-    flex: 1,
-    alignItems: "center",
-  },
-  teamLabel: {
-    marginBottom: 8,
-    textAlign: "center",
-    fontSize: 14,
-  },
-  scoreInput: {
-    textAlign: "center",
-    marginBottom: 0,
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  vs: {
-    fontSize: 16,
-    fontWeight: "bold",
-    opacity: 0.7,
   },
   modalButton: {
     flex: 1,

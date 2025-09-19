@@ -1,11 +1,12 @@
 import { Modal } from "@/components/Modal";
-import { ThemedText } from "@/components/ThemedText";
 import { useState } from "react";
 import {
   JoinPollSteps,
   useValidateCode,
 } from "@/hooks/supabase/polls/validateCode";
 import { ValidateCode } from "./ValidateCode";
+import { EnterResult } from "./EnterResult";
+import { ThemedText } from "@/components/ThemedText";
 
 type JoinModalProps = {
   visible: boolean;
@@ -14,17 +15,24 @@ type JoinModalProps = {
 
 export function JoinPollModal({ visible, onClose }: JoinModalProps) {
   const [code, setCode] = useState("");
-  const { isValidating, validateCode, validationError, joinPollStep } =
-    useValidateCode();
+  const {
+    isValidating,
+    validateCode,
+    validationError,
+    joinPollStep,
+    joinPoll,
+  } = useValidateCode();
 
   const showModalContent = () => {
     switch (joinPollStep) {
-      case JoinPollSteps.ENTERING_RESULT:
+      case JoinPollSteps.JOINING_POLL_CONFIRMATION:
         return (
           <>
-            <ThemedText>Entering result</ThemedText>
+            <ThemedText>Te uniste a la porra con éxito.</ThemedText>
           </>
         );
+      case JoinPollSteps.ENTERING_RESULT:
+        return <EnterResult onSubmit={joinPoll} />;
       default:
         return (
           <ValidateCode
