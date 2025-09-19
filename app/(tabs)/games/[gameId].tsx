@@ -1,5 +1,6 @@
 import { TeamCard } from "@/components/games/TeamCard";
 import { Polls } from "@/components/polls/Polls";
+import { ProtectedComponent } from "@/components/ProtectedComponent";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useGetSingleGame } from "@/hooks/supabase/games/getSingleGame";
@@ -77,7 +78,9 @@ export default function GamePage() {
           </View>
         </ThemedView>
 
-        <Polls game={game} />
+        <ProtectedComponent>
+          <Polls game={game} />
+        </ProtectedComponent>
       </ThemedView>
     </ThemedView>
   );
