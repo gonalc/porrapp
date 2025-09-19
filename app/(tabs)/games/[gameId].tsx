@@ -2,7 +2,7 @@ import { TeamCard } from "@/components/games/TeamCard";
 import { Polls } from "@/components/polls/Polls";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useGetSingleGame } from "@/hooks/supabase/getSingleGame";
+import { useGetSingleGame } from "@/hooks/supabase/games/getSingleGame";
 import dayjs, { DATE_FORMAT, TIME_FORMAT } from "@/utils/dates";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";

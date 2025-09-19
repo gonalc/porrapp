@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import type { Game } from "@/hooks/supabase/getGames";
+import type { Game } from "@/hooks/supabase/games/getGames";
 
 type GameScoreProps = {
   score: Game['score'];

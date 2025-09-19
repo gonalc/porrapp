@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet } from "react-native";
 
-import type { Game } from "@/hooks/supabase/getGames";
+import type { Game } from "@/hooks/supabase/games/getGames";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";

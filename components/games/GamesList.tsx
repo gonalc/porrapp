@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet } from "react-native";
 
-import { useGetGames } from "@/hooks/supabase/getGames";
+import { useGetGames } from "@/hooks/supabase/games/getGames";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";

@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { type Team } from "@/hooks/supabase/getGames";
+import { type Team } from "@/hooks/supabase/games/getGames";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 import { StyleSheet, Image } from "react-native";
