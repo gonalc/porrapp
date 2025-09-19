@@ -21,7 +21,8 @@ const MAPPING = {
   'person.fill': 'person',
   'envelope.fill': 'email',
   'person.badge.plus': 'person-add',
-  'shared.with.you': 'share'
+  'shared.with.you': 'share',
+  'checkmark': 'check'
 } as IconMapping;
 
 /**

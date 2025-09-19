@@ -2,13 +2,15 @@ import { GameResultInput } from "@/components/games/GameResultInput";
 import { LoadingButton } from "@/components/LoadingButton";
 import { Modal } from "@/components/Modal";
 import { ThemedText } from "@/components/ThemedText";
+
 import { useState } from "react";
 
 type EnterResultProps = {
   onSubmit: (result: { homeScore: number; awayScore: number }) => void;
+  isLoading: boolean;
 };
 
-export function EnterResult({ onSubmit }: EnterResultProps) {
+export function EnterResult({ onSubmit, isLoading }: EnterResultProps) {
   const [homeScore, setHomeScore] = useState("");
   const [awayScore, setAwayScore] = useState("");
 
@@ -17,8 +19,6 @@ export function EnterResult({ onSubmit }: EnterResultProps) {
       homeScore: parseInt(homeScore),
       awayScore: parseInt(awayScore),
     });
-    setHomeScore("");
-    setAwayScore("");
   };
 
   return (
@@ -33,7 +33,7 @@ export function EnterResult({ onSubmit }: EnterResultProps) {
       />
 
       <Modal.ModalActions>
-        <LoadingButton onPress={handleSubmit} isLoading={false}>
+        <LoadingButton onPress={handleSubmit} isLoading={isLoading}>
           <ThemedText type="defaultSemiBold">Confirmar</ThemedText>
         </LoadingButton>
       </Modal.ModalActions>

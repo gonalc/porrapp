@@ -6,14 +6,20 @@ import {
 } from "@/hooks/supabase/polls/validateCode";
 import { ValidateCode } from "./ValidateCode";
 import { EnterResult } from "./EnterResult";
-import { ThemedText } from "@/components/ThemedText";
+import { JoinedPoll } from "./JoinedPoll";
+import { type Poll } from "@/hooks/supabase/polls/getPolls";
 
 type JoinModalProps = {
   visible: boolean;
   onClose: () => void;
+  fetchPolls: () => Promise<Poll[]>;
 };
 
-export function JoinPollModal({ visible, onClose }: JoinModalProps) {
+export function JoinPollModal({
+  visible,
+  onClose,
+  fetchPolls,
+}: JoinModalProps) {
   const [code, setCode] = useState("");
   const {
     isValidating,
@@ -21,18 +27,23 @@ export function JoinPollModal({ visible, onClose }: JoinModalProps) {
     validationError,
     joinPollStep,
     joinPoll,
+    isJoiningPoll,
   } = useValidateCode();
 
   const showModalContent = () => {
     switch (joinPollStep) {
       case JoinPollSteps.JOINING_POLL_CONFIRMATION:
-        return (
-          <>
-            <ThemedText>Te uniste a la porra con éxito.</ThemedText>
-          </>
-        );
+        return <JoinedPoll onClose={onClose} />;
       case JoinPollSteps.ENTERING_RESULT:
-        return <EnterResult onSubmit={joinPoll} />;
+        return (
+          <EnterResult
+            onSubmit={async (result) => {
+              await joinPoll(result);
+              await fetchPolls();
+            }}
+            isLoading={isJoiningPoll}
+          />
+        );
       default:
         return (
           <ValidateCode

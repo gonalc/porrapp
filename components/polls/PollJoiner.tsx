@@ -17,6 +17,7 @@ export function PollJoiner() {
     closeModal,
     onCreatePoll,
     createdPoll,
+    fetchPolls
   } = usePollsContext();
 
   const [joinPollModalVisible, setJoinPollModalVisible] = useState(false);
@@ -64,6 +65,7 @@ export function PollJoiner() {
       <JoinPollModal
         visible={joinPollModalVisible}
         onClose={() => setJoinPollModalVisible(false)}
+        fetchPolls={fetchPolls}
       />
     </ThemedView>
   );
