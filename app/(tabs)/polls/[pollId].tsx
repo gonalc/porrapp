@@ -1,7 +1,8 @@
 import { GameResult } from "@/components/games/GameResult";
 import { Loader } from "@/components/Loader";
-import { ThemedText } from "@/components/ThemedText";
+import { GuessCard } from "@/components/polls/GuessCard";
 import { ThemedView } from "@/components/ThemedView";
+import { useSession } from "@/contexts/session";
 import { useGetSinglePoll } from "@/hooks/supabase/polls/getSinglePoll";
 import { useLocalSearchParams } from "expo-router";
 import { FlatList, StyleSheet } from "react-native";
@@ -10,8 +11,9 @@ export default function SinglePollPage() {
   const { pollId } = useLocalSearchParams();
   const parsedPollId = Array.isArray(pollId) ? pollId[0] : pollId;
   const { poll } = useGetSinglePoll(parsedPollId);
+  const { data: session } = useSession();
 
-  if (!poll) {
+  if (!poll || !session) {
     return <Loader isLoading />;
   }
 
@@ -21,12 +23,11 @@ export default function SinglePollPage() {
 
       <FlatList
         data={poll.guesses}
-        renderItem={({ item }) => (
-          <ThemedText>
-            {item.home_team_score} - {item.away_team_score}
-          </ThemedText>
-        )}
+        renderItem={({ item }) => <GuessCard guess={item} userId={session.user.id} />}
         keyExtractor={(item) => item.id}
+        numColumns={3}
+        style={styles.listContainer}
+        columnWrapperStyle={styles.row}
       />
     </ThemedView>
   );
@@ -39,4 +40,11 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 20,
   },
+  listContainer: {
+    flex: 1,
+    width: "100%",
+  },
+  row: {
+    justifyContent: "space-between",
+  }
 });
