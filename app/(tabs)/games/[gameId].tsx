@@ -1,7 +1,8 @@
 import { GameResult } from "@/components/games/GameResult";
+import { Loader } from "@/components/Loader";
 import { Polls } from "@/components/polls/Polls";
 import { ProtectedComponent } from "@/components/ProtectedComponent";
-import { ThemedText } from "@/components/ThemedText";
+
 import { ThemedView } from "@/components/ThemedView";
 import { useGetSingleGame } from "@/hooks/supabase/games/getSingleGame";
 import { useLocalSearchParams } from "expo-router";
@@ -12,24 +13,22 @@ export default function GamePage() {
   const gameCode = Array.isArray(gameId) ? gameId[0] : gameId;
   const { game, refreshing } = useGetSingleGame(gameCode);
 
-  if (!game || refreshing) {
-    return (
-      <ThemedView style={styles.container}>
-        <ThemedText>Loading...</ThemedText>
-      </ThemedView>
-    );
+  if (!game) {
+    return <Loader isLoading />
   }
 
   return (
-    <ThemedView style={styles.scrollView}>
-      <ThemedView style={styles.container}>
-        <GameResult game={game} />
+    <Loader isLoading={refreshing}>
+      <ThemedView style={styles.scrollView}>
+        <ThemedView style={styles.container}>
+          <GameResult game={game} />
 
-        <ProtectedComponent>
-          <Polls game={game} />
-        </ProtectedComponent>
+          <ProtectedComponent>
+            <Polls game={game} />
+          </ProtectedComponent>
+        </ThemedView>
       </ThemedView>
-    </ThemedView>
+    </Loader>
   );
 }
 
