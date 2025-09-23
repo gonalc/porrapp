@@ -1,17 +1,16 @@
 import { Modal } from "@/components/Modal";
 import { ThemedText } from "@/components/ThemedText";
-import { type Poll } from "@/hooks/supabase/polls/getPolls";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet } from "react-native";
 import { LoadingButton } from "../LoadingButton";
 import { IconSymbol } from "../ui/IconSymbol";
 import { socialShare } from "@/utils/share";
-import { usePollsContext } from "@/contexts/polls";
+import { type PollWithGame } from "@/hooks/supabase/polls/getSinglePoll";
 
 type SharePollModalProps = {
   visible: boolean;
   onClose: () => void;
-  poll: Poll | null;
+  poll: PollWithGame | null;
 };
 
 export function SharePollModal({
@@ -23,11 +22,9 @@ export function SharePollModal({
   const neutralSupportColor = useThemeColor({}, "neutralSupport");
   const textColor = useThemeColor({}, "text");
 
-  const { game } = usePollsContext();
-
   if (!poll) return null;
 
-  const { home_team, away_team } = game;
+  const { home_team, away_team } = poll.games;
 
   const homeTeamName = home_team.abbName;
   const awayTeamName = away_team.abbName;

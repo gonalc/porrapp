@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { type Poll } from "./getPolls";
 import { type Game } from "@/hooks/supabase/games/getGames";
 
-type PollWithGame = Poll & {
+export type PollWithGame = Poll & {
   games: Game
 }
 

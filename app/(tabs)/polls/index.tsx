@@ -3,9 +3,15 @@ import { StyleSheet } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useSession } from "@/contexts/session";
+import { useGetPolls } from "@/hooks/supabase/polls/getPolls";
+import { Loader } from "@/components/Loader";
+import { PollListBase } from "@/components/polls/PollListBase";
 
 export default function PollsScreen() {
   const { data: session } = useSession();
+  const { polls, isLoading, fetchPolls } = useGetPolls({
+    userId: session?.user.id,
+  });
 
   if (!session) {
     return (
@@ -18,9 +24,19 @@ export default function PollsScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Nuevas Porras!</ThemedText>
-    </ThemedView>
+    <Loader isLoading={isLoading}>
+      <ThemedView style={styles.container}>
+        <ThemedText type="title" style={styles.title}>Porras</ThemedText>
+
+        <PollListBase
+          polls={polls}
+          isFetchingPolls={isLoading}
+          fetchPolls={fetchPolls}
+          showTeams
+          showDates
+        />
+      </ThemedView>
+    </Loader>
   );
 }
 
@@ -37,5 +53,8 @@ const styles = StyleSheet.create({
   loggedOutMessage: {
     fontSize: 20,
     textAlign: "center",
-  }
+  },
+  title: {
+    marginBottom: 16,
+  },
 });

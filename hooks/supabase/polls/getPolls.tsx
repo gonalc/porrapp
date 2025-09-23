@@ -1,6 +1,8 @@
 import { supabase } from "@/services/supabase";
 import { type QueryData } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
+import { type PollWithGame } from "./getSinglePoll";
+
 
 export type Guess = {
   id: string;
@@ -17,20 +19,23 @@ export type Poll = {
   code: string;
 };
 
-export const useGetPolls = (gameCode: string, _userId: string) => {
-  const [polls, setPolls] = useState<Poll[]>([]);
+type UseGetPollsProps = {
+  gameCode?: string;
+  userId?: string;
+};
+
+export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
+  const [polls, setPolls] = useState<PollWithGame[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // TODO: Fetch only polls where the user is the author or has guesses.
   const fetchPolls = useCallback(async () => {
     setIsLoading(true);
 
-    const getPollsQuery = supabase
-      .from("polls")
-      .select(
-        `
+    const getPollsQuery = supabase.from("polls").select(
+      `
       id,
       game_code,
+      games!polls_game_code_fkey (*),
       author,
       code,
       guesses (
@@ -40,14 +45,19 @@ export const useGetPolls = (gameCode: string, _userId: string) => {
         author
       )
     `,
-      )
-      .eq("game_code", gameCode);
+    );
+
+    if (gameCode) {
+      getPollsQuery.eq("game_code", gameCode);
+    }
+
+    if (userId) {
+      getPollsQuery.eq("guesses.author", userId);
+    }
 
     type Polls = QueryData<typeof getPollsQuery>;
 
     const { data, error } = await getPollsQuery;
-
-    console.log("POLLS: ", JSON.stringify(data, null, 2));
 
     setIsLoading(false);
 
@@ -56,12 +66,14 @@ export const useGetPolls = (gameCode: string, _userId: string) => {
       throw error;
     }
 
-    const polls: Polls = data;
+    const polls: Polls = data.filter((poll) =>
+      poll.guesses.some((guess) => guess.author === userId),
+    );
 
-    setPolls(polls);
+    setPolls(polls as unknown as PollWithGame[]);
 
     return polls;
-  }, [gameCode]);
+  }, [gameCode, userId]);
 
   useEffect(() => {
     fetchPolls();

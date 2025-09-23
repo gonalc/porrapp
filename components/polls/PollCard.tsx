@@ -1,18 +1,24 @@
-import { type Poll } from "@/hooks/supabase/polls/getPolls";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useSession } from "@/contexts/session";
 import { useMemo } from "react";
+import { type PollWithGame } from "@/hooks/supabase/polls/getSinglePoll";
 
 type PollCardProps = {
-  poll: Poll;
+  poll: PollWithGame;
   onLongPress?: () => void;
   onPress?: () => void;
+  showTeams?: boolean;
 };
 
-export function PollCard({ poll, onLongPress = () => {}, onPress }: PollCardProps) {
+export function PollCard({
+  poll,
+  onLongPress = () => {},
+  onPress,
+  showTeams,
+}: PollCardProps) {
   const surfaceColor = useThemeColor({}, "surface");
   const { data: session } = useSession();
 
@@ -28,9 +34,21 @@ export function PollCard({ poll, onLongPress = () => {}, onPress }: PollCardProp
   return (
     <TouchableOpacity onLongPress={onLongPress} onPress={onPress}>
       <ThemedView style={[styles.container, { backgroundColor: surfaceColor }]}>
+        {showTeams && (
+          <Image
+            source={{ uri: poll.games.home_team.imageUrlSizes.M }}
+            style={styles.teamLogo}
+          />
+        )}
         <ThemedText type="defaultSemiBold" style={styles.myGuess}>
           {myGuess.home_team_score} - {myGuess.away_team_score}
         </ThemedText>
+        {showTeams && (
+          <Image
+            source={{ uri: poll.games.away_team.imageUrlSizes.M }}
+            style={styles.teamLogo}
+          />
+        )}
         <ThemedText>{poll.guesses.length} participantes</ThemedText>
       </ThemedView>
     </TouchableOpacity>
@@ -49,4 +67,8 @@ const styles = StyleSheet.create({
   myGuess: {
     fontSize: 24,
   },
+  teamLogo: {
+    width: 30,
+    height: 30,
+  }
 });
