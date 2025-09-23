@@ -31,6 +31,10 @@ export function PollCard({
     return null;
   }
 
+  const { homeTeam, awayTeam } = poll.games.score;
+  const homeTeamScore = homeTeam.totalScore;
+  const awayTeamScore = awayTeam.totalScore;
+
   return (
     <TouchableOpacity onLongPress={onLongPress} onPress={onPress}>
       <ThemedView style={[styles.container, { backgroundColor: surfaceColor }]}>
@@ -40,9 +44,14 @@ export function PollCard({
             style={styles.teamLogo}
           />
         )}
-        <ThemedText type="defaultSemiBold" style={styles.myGuess}>
-          {myGuess.home_team_score} - {myGuess.away_team_score}
-        </ThemedText>
+        <ThemedView style={[styles.resultsContainer, { backgroundColor: surfaceColor }]}>
+          <ThemedText type="defaultSemiBold" style={styles.myGuess}>
+            {myGuess.home_team_score} - {myGuess.away_team_score}
+          </ThemedText>
+          {poll.games.status !== "Sin comenzar" && <ThemedText>
+            {homeTeamScore} - {awayTeamScore}
+          </ThemedText>}
+        </ThemedView>
         {showTeams && (
           <Image
             source={{ uri: poll.games.away_team.imageUrlSizes.M }}
@@ -70,5 +79,8 @@ const styles = StyleSheet.create({
   teamLogo: {
     width: 30,
     height: 30,
+  },
+  resultsContainer: {
+    alignItems: "center",
   }
 });
