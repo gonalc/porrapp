@@ -33,7 +33,7 @@ export const useCreatePoll = () => {
             game_code: gameCode,
             author: userId,
           })
-          .select()
+          .select(`*, games(*)`)
           .single();
 
         if (error) {
