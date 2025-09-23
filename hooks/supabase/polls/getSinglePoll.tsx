@@ -39,8 +39,6 @@ export const useGetSinglePoll = (pollId: string) => {
       return;
     }
 
-    console.log('Poll fetched:', JSON.stringify(data, null, 2));
-
     setPoll(data as unknown as PollWithGame);
 
     setIsLoading(false);
