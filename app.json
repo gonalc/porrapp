@@ -1,16 +1,16 @@
 {
   "expo": {
     "name": "Keeniela",
-    "slug": "keeniela",
-    "version": "1.0.0",
+    "slug": "porrapp-app",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "keeniela",
+    "scheme": "porrappapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.gonzzdev.keeniela"
+      "bundleIdentifier": "com.gonzzdev.porrappapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -18,7 +18,7 @@
         "backgroundColor": "#007BFF"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.gonzzdev.keeniela"
+      "package": "com.gonzzdev.porrappapp"
     },
     "web": {
       "bundler": "metro",

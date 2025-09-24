@@ -1,5 +1,5 @@
 {
-  "name": "porrapp-app",
+  "name": "keeniela",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -8,7 +8,9 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "build:apk": "eas build -p android --profile preview",
+    "preview": "eas build:run -p android"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
