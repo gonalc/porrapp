@@ -1,5 +1,6 @@
 import { useSession } from "@/contexts/session";
 import { supabase } from "@/services/supabase";
+import { type AuthSession } from "@supabase/supabase-js";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 
@@ -7,6 +8,8 @@ export enum Step {
   EMAIL,
   OTP,
 }
+
+const TEST_USER_EMAIL = "test@example.com";
 
 export const useSendOtp = () => {
   const router = useRouter();
@@ -18,12 +21,35 @@ export const useSendOtp = () => {
   const [email, setEmail] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const loginWithTestUser = useCallback(
+    async () => {
+      const { error, data: session } = await supabase.auth.signInAnonymously();
+
+      if (!error && !!session.user) {
+        setSession(session as unknown as AuthSession);
+        return router.replace("/");
+      }
+
+      console.error("Error in with test user: ", error);
+
+      setIsLoading(false);
+    },
+    [setSession, router],
+  );
+
   const sendOtp = useCallback(async (email: string) => {
     setIsLoading(true);
+
+    if (email === TEST_USER_EMAIL) {
+      await loginWithTestUser();
+      return;
+    }
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
     });
+
+
 
     if (!error) {
       setStep(Step.OTP);
@@ -32,13 +58,16 @@ export const useSendOtp = () => {
     setEmail(email);
 
     setIsLoading(false);
-  }, []);
+  }, [loginWithTestUser]);
 
   const verifyOtp = useCallback(
     async (otp: string) => {
       setIsLoading(true);
 
-      const { error, data: { session } } = await supabase.auth.verifyOtp({
+      const {
+        error,
+        data: { session },
+      } = await supabase.auth.verifyOtp({
         email,
         token: otp,
         type: "email",

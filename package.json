@@ -1,7 +1,7 @@
 {
   "name": "keeniela",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "lint": "oxlint",
     "build:apk": "eas build -p android --profile preview",
-    "preview": "eas build:run -p android"
+    "preview": "eas build:run -p android",
+    "prod:android": "cd android && ./gradlew app:bundleRelease && cd ../"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
