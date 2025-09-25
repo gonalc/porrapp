@@ -2,7 +2,7 @@ import { supabase } from "@/services/supabase";
 import { useCallback, useState } from "react";
 import { useSession } from "@/contexts/session";
 import { type MatchResult } from "@/components/MatchResultModal";
-import { type Poll } from "./getPolls";
+import { type PollWithGame } from "./getSinglePoll";
 
 export enum CreatePollStep {
   MODAL_CLOSED,
@@ -19,7 +19,7 @@ export const useCreatePoll = () => {
     homeScore: "0",
     awayScore: "0",
   });
-  const [poll, setPoll] = useState<Poll | null>(null);
+  const [poll, setPoll] = useState<PollWithGame | null>(null);
 
   const userId = session?.user.id;
 

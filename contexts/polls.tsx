@@ -4,7 +4,7 @@ import {
   CreatePollStep,
   useCreatePoll,
 } from "@/hooks/supabase/polls/createPoll";
-import { Poll, useGetPolls } from "@/hooks/supabase/polls/getPolls";
+import { type Poll, useGetPolls } from "@/hooks/supabase/polls/getPolls";
 import { createContext, type PropsWithChildren, useContext } from "react";
 import { useSession } from "./session";
 import { type PollWithGame } from "@/hooks/supabase/polls/getSinglePoll";
@@ -13,7 +13,7 @@ type PollsContextType = {
   polls: PollWithGame[];
   fetchPolls: () => Promise<Poll[]>;
   onCreatePoll: (result: MatchResult) => Promise<void>;
-  createdPoll: Poll | null;
+  createdPoll: PollWithGame | null;
   startPollCreation: () => void;
   creationStep: CreatePollStep;
   isFetchingPolls: boolean;

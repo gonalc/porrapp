@@ -6,6 +6,7 @@ import { useSession } from "@/contexts/session";
 import { useGetPolls } from "@/hooks/supabase/polls/getPolls";
 import { Loader } from "@/components/Loader";
 import { PollListBase } from "@/components/polls/PollListBase";
+import { LoggedOutMessage } from "@/components/polls/LoggedOutMessage";
 
 export default function PollsScreen() {
   const { data: session } = useSession();
@@ -14,19 +15,15 @@ export default function PollsScreen() {
   });
 
   if (!session) {
-    return (
-      <ThemedView style={[styles.container, styles.loggedOut]}>
-        <ThemedText type="defaultSemiBold" style={styles.loggedOutMessage}>
-          Para poder crear o unirte a una porra, debes iniciar sesión.
-        </ThemedText>
-      </ThemedView>
-    );
+    return <LoggedOutMessage />;
   }
 
   return (
     <Loader isLoading={isLoading}>
       <ThemedView style={styles.container}>
-        <ThemedText type="title" style={styles.title}>Porras</ThemedText>
+        <ThemedText type="title" style={styles.title}>
+          Porras
+        </ThemedText>
 
         <PollListBase
           polls={polls}
@@ -45,14 +42,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 32,
     paddingTop: 64,
-  },
-  loggedOut: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loggedOutMessage: {
-    fontSize: 20,
-    textAlign: "center",
   },
   title: {
     marginBottom: 16,

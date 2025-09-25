@@ -1,5 +1,6 @@
 import { GameResult } from "@/components/games/GameResult";
 import { Loader } from "@/components/Loader";
+import { LoggedOutMessage } from "@/components/polls/LoggedOutMessage";
 import { Polls } from "@/components/polls/Polls";
 import { ProtectedComponent } from "@/components/ProtectedComponent";
 
@@ -23,7 +24,7 @@ export default function GamePage() {
         <ThemedView style={styles.container}>
           <GameResult game={game} />
 
-          <ProtectedComponent>
+          <ProtectedComponent fallback={<LoggedOutMessage />}>
             <Polls game={game} />
           </ProtectedComponent>
         </ThemedView>
