@@ -1,4 +1,5 @@
 import { supabase } from "@/services/supabase";
+import { cacheService } from "@/services/cache";
 import dayjs from "@/utils/dates";
 import { useCallback, useEffect, useState } from "react";
 
@@ -78,6 +79,8 @@ export type Game = {
   score: Score;
 };
 
+const CACHE_KEY = "games";
+
 export const useGetGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -85,26 +88,39 @@ export const useGetGames = () => {
   const fetchGames = useCallback(async () => {
     setRefreshing(true);
 
-    const yesterday = dayjs().subtract(1, 'day').toISOString();
+    const cachedGames = cacheService.get<Game[]>(CACHE_KEY);
+
+    if (cachedGames) {
+      setGames(cachedGames);
+      setRefreshing(false);
+      return;
+    }
+
+    const yesterday = dayjs().subtract(1, "day").toISOString();
 
     const { data, error } = await supabase
       .from("games")
       .select("*")
       .filter("datetime", "gte", yesterday)
-      .not('datetime', 'is', null)
+      .not("datetime", "is", null)
       .order("datetime", { ascending: true });
 
     if (error) {
       console.error("[getGames hook] Error getting games: ", error);
     } else {
       setGames(data);
+      cacheService.set(CACHE_KEY, data);
     }
     setRefreshing(false);
+  }, []);
+
+  const invalidateCache = useCallback(() => {
+    cacheService.remove(CACHE_KEY);
   }, []);
 
   useEffect(() => {
     fetchGames();
   }, [fetchGames]);
 
-  return { games, refreshing, fetchGames };
+  return { games, refreshing, fetchGames, invalidateCache };
 };

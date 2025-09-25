@@ -1,0 +1,2 @@
+export const DEFAULT_CACHE_TIME_IN_MINUTES = 5;
+export const LIVE_GAME_CACHE_TIME_IN_MINUTES = 1;
