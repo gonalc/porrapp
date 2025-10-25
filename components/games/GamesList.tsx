@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Separator } from "@/components/Separator";
 
-import dayjs, { DATE_FORMAT } from "@/utils/dates";
+import { DateFormats, displayDate } from "@/utils/dates";
 import { GameCard } from "./GameCard";
 import { useRouter } from "expo-router";
 
@@ -26,7 +26,7 @@ export function GamesList() {
             {showDate && (
               <ThemedView style={styles.dateContainer}>
                 <ThemedText type="subtitle">
-                  {dayjs(item.date).format(DATE_FORMAT)}
+                  {displayDate(item.date, DateFormats.DATE)}
                 </ThemedText>
               </ThemedView>
             )}
