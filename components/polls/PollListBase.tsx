@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import { SharePollModal } from "./SharePollModal";
 import { type PollWithGame } from "@/hooks/supabase/polls/getSinglePoll";
 import { ThemedText } from "@/components/ThemedText";
-import dayjs, { DATE_FORMAT } from "@/utils/dates";
+import dayjs, { DateFormats } from "@/utils/dates";
 
 type PollListBaseProps = {
   polls: PollWithGame[];
@@ -52,7 +52,7 @@ export function PollListBase({
             <>
               <ThemedView>
                 <ThemedText type="subtitle">
-                  {dayjs(item.games.date).format(DATE_FORMAT)}
+                  {dayjs(item.games.date).format(DateFormats.DATE)}
                 </ThemedText>
               </ThemedView>
               <PollCard

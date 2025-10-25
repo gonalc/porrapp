@@ -7,10 +7,6 @@ dayjs.extend(isToday);
 dayjs.extend(isTomorrow);
 dayjs.extend(isYesterday);
 
-export const DATE_FORMAT = "DD/MM/YYYY";
-
-export const TIME_FORMAT = "HH:mm";
-
 export enum DateFormats {
   DATE = "DD/MM/YYYY",
   TIME = "HH:mm",

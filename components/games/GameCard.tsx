@@ -6,7 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Card } from "@/components/Card";
 
-import dayjs, { TIME_FORMAT } from "@/utils/dates";
+import dayjs, { DateFormats} from "@/utils/dates";
 import { GameScore } from "./GameScore";
 
 type GameCardProps = {
@@ -44,7 +44,7 @@ export function GameCard({ game, onPress }: GameCardProps) {
         <ThemedView>
           {showDate ? (
             <ThemedText type="defaultSemiBold" style={styles.gameTime}>
-              {dayjs(game.datetime).format(TIME_FORMAT)}
+              {dayjs(game.datetime).format(DateFormats.TIME)}
             </ThemedText>
           ) : (
             <GameScore score={game.score} />

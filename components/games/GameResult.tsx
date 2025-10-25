@@ -3,7 +3,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { type Game } from "@/hooks/supabase/games/getGames";
 import { StyleSheet } from "react-native";
 import { TeamCard } from "@/components/games/TeamCard";
-import dayjs, { DATE_FORMAT, TIME_FORMAT } from "@/utils/dates";
+import dayjs, { DateFormats } from "@/utils/dates";
 
 type GameResultProps = {
   game: Game;
@@ -30,7 +30,7 @@ export function GameResult({ game }: GameResultProps) {
           <ThemedText
             style={styles.gameDateTime}
             type="caption"
-          >{`${dayjs(game.date).format(DATE_FORMAT)} ${dayjs(game.datetime).format(TIME_FORMAT)}`}</ThemedText>
+          >{`${dayjs(game.date).format(DateFormats.DATE)} ${dayjs(game.datetime).format(DateFormats.TIME)}`}</ThemedText>
           {LIVE_STATUS.has(game.status) ? (
             <>
               <ThemedView style={styles.scoreBox}>
