@@ -19,6 +19,10 @@ export function OtpStep({ onSubmit, isLoading, errorMessage }: OtpProps) {
 
   return (
     <>
+      <ThemedText type="defaultSemiBold" style={{
+        marginBottom: 16
+      }}>Hemos enviado un código de verificación a tu correo electrónico.</ThemedText>
+
       <OtpField onChange={setOtpValue} />
 
       {errorMessage && (
