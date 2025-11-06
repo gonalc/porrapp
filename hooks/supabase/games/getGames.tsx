@@ -2,6 +2,7 @@ import { supabase } from "@/services/supabase";
 import { cacheService } from "@/services/cache";
 import dayjs from "@/utils/dates";
 import { useCallback, useEffect, useState } from "react";
+import { groupBy } from "@/utils/group-by";
 
 type AlternateNames = {
   esES: string;
@@ -91,6 +92,7 @@ export const useGetGames = () => {
     const cachedGames = cacheService.get<Game[]>(CACHE_KEY);
 
     if (cachedGames) {
+      console.log('cache hit')
       setGames(cachedGames);
       setRefreshing(false);
       return;
@@ -108,7 +110,8 @@ export const useGetGames = () => {
     if (error) {
       console.error("[getGames hook] Error getting games: ", error);
     } else {
-      setGames(data);
+      const gamesGroupedByTournament = groupBy(data, 'tournament_name');
+      setGames(Object.values(gamesGroupedByTournament).flat());
       cacheService.set(CACHE_KEY, data);
     }
     setRefreshing(false);
