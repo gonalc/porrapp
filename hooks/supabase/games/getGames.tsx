@@ -92,7 +92,6 @@ export const useGetGames = () => {
     const cachedGames = cacheService.get<Game[]>(CACHE_KEY);
 
     if (cachedGames) {
-      console.log('cache hit')
       setGames(cachedGames);
       setRefreshing(false);
       return;
