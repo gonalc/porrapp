@@ -3,6 +3,10 @@ import { type QueryData } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
 import { type PollWithGame } from "./getSinglePoll";
 
+export enum PollModality {
+  PUBLIC = 'public',
+  PRIVATE = 'private',
+}
 
 export type Guess = {
   id: string;
@@ -17,6 +21,7 @@ export type Poll = {
   author: string;
   guesses: Guess[];
   code: string;
+  modality: PollModality
 };
 
 type UseGetPollsProps = {
@@ -38,6 +43,7 @@ export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
       games!polls_game_code_fkey (*),
       author,
       code,
+      modality,
       guesses (
         id,
         home_team_score,

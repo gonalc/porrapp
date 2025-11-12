@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
+import { Checkbox } from "expo-checkbox";
 import { LoadingButton } from "./LoadingButton";
 import { ThemedText } from "./ThemedText";
 import { Modal } from "@/components/Modal";
 import { GameResultInput } from "./games/GameResultInput";
+import { ThemedView } from "./ThemedView";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { type CreationPoll } from "@/contexts/polls";
+import { type Guess } from "@/hooks/supabase/polls/getPolls";
 
 export type MatchResult = {
   homeScore: string;
@@ -13,10 +18,11 @@ export type MatchResult = {
 type MatchResultModalProps = {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (result: MatchResult) => void;
+  onSubmit: (result: CreationPoll) => void;
   isLoading?: boolean;
   homeTeamName?: string;
   awayTeamName?: string;
+  myPublicGuess: Guess | null;
 };
 
 export function MatchResultModal({
@@ -26,12 +32,16 @@ export function MatchResultModal({
   isLoading = false,
   homeTeamName = "Local",
   awayTeamName = "Visitante",
+  myPublicGuess = null,
 }: MatchResultModalProps) {
   const [homeScore, setHomeScore] = useState("");
   const [awayScore, setAwayScore] = useState("");
+  const [isPublicPoll, setIsPublicPoll] = useState(false);
+
+  const accentColor = useThemeColor({}, "accent");
 
   const handleSubmit = () => {
-    onSubmit({ homeScore, awayScore });
+    onSubmit({ homeScore, awayScore, isPublic: isPublicPoll });
     setHomeScore("");
     setAwayScore("");
   };
@@ -43,6 +53,8 @@ export function MatchResultModal({
   };
 
   const isSubmitDisabled = homeScore.trim() === "" || awayScore.trim() === "";
+
+
 
   return (
     <Modal visible={visible} onRequestClose={handleClose}>
@@ -58,6 +70,29 @@ export function MatchResultModal({
         homeTeamName={homeTeamName}
         awayTeamName={awayTeamName}
       />
+
+      {myPublicGuess ? (
+        <ThemedView style={styles.publicPollContainer}>
+          <ThemedText type="defaultSemiBold">
+            Ya has participado en la porra mundial
+          </ThemedText>
+          <ThemedText type="subtitle">
+            {myPublicGuess.home_team_score} - {myPublicGuess.away_team_score}
+          </ThemedText>
+        </ThemedView>
+      ) : (
+        <ThemedView style={styles.isPublicPollContainer}>
+          <Checkbox
+            value={isPublicPoll}
+            onValueChange={setIsPublicPoll}
+            color={accentColor}
+            disabled={!!myPublicGuess}
+          />
+          <ThemedText type="defaultSemiBold">
+            Participar en la porra mundial
+          </ThemedText>
+        </ThemedView>
+      )}
 
       <Modal.ModalActions>
         <LoadingButton
@@ -91,5 +126,17 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     flex: 1,
+  },
+  isPublicPollContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingBottom: 16,
+  },
+  publicPollContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 8,
+    paddingBottom: 16,
   },
 });

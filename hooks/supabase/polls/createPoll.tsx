@@ -3,11 +3,14 @@ import { useCallback, useState } from "react";
 import { useSession } from "@/contexts/session";
 import { type MatchResult } from "@/components/MatchResultModal";
 import { type PollWithGame } from "./getSinglePoll";
+import { type CreationPoll } from "@/contexts/polls";
+import { PollModality } from "./getPolls";
 
 export enum CreatePollStep {
   MODAL_CLOSED,
   INSERT_GUESS,
   SHARE_CODE,
+  PUBLIC_POLL_JOINED
 }
 
 export const useCreatePoll = () => {
@@ -24,7 +27,7 @@ export const useCreatePoll = () => {
   const userId = session?.user.id;
 
   const createPoll = useCallback(
-    async (gameCode: string, firstGuess: MatchResult) => {
+    async (gameCode: string, firstGuess: CreationPoll) => {
       try {
         setIsLoading(true);
         const { data, error } = await supabase
@@ -32,6 +35,7 @@ export const useCreatePoll = () => {
           .insert({
             game_code: gameCode,
             author: userId,
+            modality: firstGuess.isPublic ? PollModality.PUBLIC : PollModality.PRIVATE,
           })
           .select(`*, games(*)`)
           .single();
@@ -56,7 +60,7 @@ export const useCreatePoll = () => {
           throw new Error("Failed to create guess");
         }
 
-        setCreationStep(CreatePollStep.SHARE_CODE);
+        setCreationStep(firstGuess.isPublic ? CreatePollStep.PUBLIC_POLL_JOINED : CreatePollStep.SHARE_CODE);
       } catch (error) {
         console.error("Unexpected error:", error);
         throw error;

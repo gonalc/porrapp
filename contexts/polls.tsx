@@ -4,15 +4,19 @@ import {
   CreatePollStep,
   useCreatePoll,
 } from "@/hooks/supabase/polls/createPoll";
-import { type Poll, useGetPolls } from "@/hooks/supabase/polls/getPolls";
+import { type Poll, PollModality, useGetPolls } from "@/hooks/supabase/polls/getPolls";
 import { createContext, type PropsWithChildren, useContext } from "react";
 import { useSession } from "./session";
 import { type PollWithGame } from "@/hooks/supabase/polls/getSinglePoll";
 
+export type CreationPoll = MatchResult & {
+  isPublic: boolean;
+}
+
 type PollsContextType = {
   polls: PollWithGame[];
   fetchPolls: () => Promise<Poll[]>;
-  onCreatePoll: (result: MatchResult) => Promise<void>;
+  onCreatePoll: (result: CreationPoll) => Promise<void>;
   createdPoll: PollWithGame | null;
   startPollCreation: () => void;
   creationStep: CreatePollStep;
@@ -20,6 +24,7 @@ type PollsContextType = {
   isCreatingPoll: boolean;
   closeModal: () => void;
   game: Game;
+  publicPoll: PollWithGame | null;
 };
 
 type PollsProviderProps = PropsWithChildren<{
@@ -51,8 +56,8 @@ export const PollsContextProvider = ({
     gameCode: game.code,
   });
 
-  const onCreatePoll = async (result: MatchResult) => {
-    await createPoll(game.code, result);
+  const onCreatePoll = async (payload: CreationPoll) => {
+    await createPoll(game.code, payload);
     await fetchPolls();
   };
 
@@ -69,6 +74,7 @@ export const PollsContextProvider = ({
         createdPoll,
         closeModal,
         game,
+        publicPoll: polls.find(p => p.modality === PollModality.PUBLIC) ?? null,
       }}
     >
       {children}

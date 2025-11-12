@@ -9,6 +9,8 @@ import { usePollsContext } from "@/contexts/polls";
 import { JoinPollModal } from "./JoinPollModal";
 import { useState } from "react";
 import { hasGameExpired } from "@/utils/games/game-has-expired";
+import { useSession } from "@/contexts/session";
+import { JoinedPublicPollModal } from "./JoinedPublicPollModal";
 
 export function PollJoiner() {
   const {
@@ -20,7 +22,9 @@ export function PollJoiner() {
     createdPoll,
     fetchPolls,
     game,
+    publicPoll,
   } = usePollsContext();
+  const session = useSession();
 
   const [joinPollModalVisible, setJoinPollModalVisible] = useState(false);
 
@@ -37,6 +41,11 @@ export function PollJoiner() {
     flexDirection: "row",
     flex: 1,
   };
+
+  const myPublicGuess =
+    publicPoll?.guesses?.find(
+      (guess) => guess.author === session?.data?.user?.id,
+    ) ?? null;
 
   return (
     <ThemedView style={styles.container}>
@@ -62,6 +71,7 @@ export function PollJoiner() {
         onClose={closeModal}
         onSubmit={onCreatePoll}
         isLoading={isCreatingPoll}
+        myPublicGuess={myPublicGuess}
       />
 
       <SharePollModal
@@ -75,6 +85,18 @@ export function PollJoiner() {
         onClose={() => setJoinPollModalVisible(false)}
         fetchPolls={fetchPolls}
       />
+
+      {!!myPublicGuess && createdPoll && (
+        <JoinedPublicPollModal
+          visible={
+            creationStep === CreatePollStep.PUBLIC_POLL_JOINED &&
+            !!myPublicGuess
+          }
+          onClose={closeModal}
+          poll={createdPoll}
+          myPublicGuess={myPublicGuess}
+        />
+      )}
     </ThemedView>
   );
 }
