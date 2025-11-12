@@ -14,11 +14,24 @@ export function GamesList() {
   const { games, refreshing, fetchGames } = useGetGames();
   const router = useRouter();
 
-  const getTournamentLabel = ({ tournament_name, match_day }: Pick<Game, "tournament_name" | "match_day">) => {
-    const matchDay = isNaN(Number(match_day)) ? match_day : `Jornada ${match_day}`;
+  if (!games?.length) {
+    return (
+      <ThemedView style={styles.emptyContainer}>
+        <ThemedText type="default">No hay partidos disponibles.</ThemedText>
+      </ThemedView>
+    );
+  }
+
+  const getTournamentLabel = ({
+    tournament_name,
+    match_day,
+  }: Pick<Game, "tournament_name" | "match_day">) => {
+    const matchDay = isNaN(Number(match_day))
+      ? match_day
+      : `Jornada ${match_day}`;
 
     return `${tournament_name} ${matchDay}`;
-  }
+  };
 
   return (
     <FlatList
@@ -26,7 +39,9 @@ export function GamesList() {
       renderItem={({ item, index }) => {
         const previousGame = games[index - 1];
         const showDate = !previousGame || previousGame.date !== item.date;
-        const showTournament = !previousGame || previousGame.tournament_name !== item.tournament_name;
+        const showTournament =
+          !previousGame ||
+          previousGame.tournament_name !== item.tournament_name;
 
         return (
           <>
@@ -43,13 +58,16 @@ export function GamesList() {
                 <ThemedText type="defaultSemiBold">
                   {getTournamentLabel({
                     tournament_name: item.tournament_name,
-                    match_day: item.match_day
+                    match_day: item.match_day,
                   })}
                 </ThemedText>
               </ThemedView>
             )}
 
-            <GameCard game={item} onPress={() => router.navigate(`/games/${item.code}`)} />
+            <GameCard
+              game={item}
+              onPress={() => router.navigate(`/games/${item.code}`)}
+            />
           </>
         );
       }}
@@ -68,5 +86,10 @@ const styles = StyleSheet.create({
   },
   tournamentContainer: {
     marginHorizontal: 32,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 16,
   },
 });
