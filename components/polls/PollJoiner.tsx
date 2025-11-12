@@ -8,6 +8,7 @@ import { SharePollModal } from "./SharePollModal";
 import { usePollsContext } from "@/contexts/polls";
 import { JoinPollModal } from "./JoinPollModal";
 import { useState } from "react";
+import { hasGameExpired } from "@/utils/games/game-has-expired";
 
 export function PollJoiner() {
   const {
@@ -17,10 +18,17 @@ export function PollJoiner() {
     closeModal,
     onCreatePoll,
     createdPoll,
-    fetchPolls
+    fetchPolls,
+    game,
   } = usePollsContext();
 
   const [joinPollModalVisible, setJoinPollModalVisible] = useState(false);
+
+  const gameHasExpired = hasGameExpired(game);
+
+  if (gameHasExpired) {
+    return null;
+  }
 
   const buttonStyles: StyleProp<ViewStyle> = {
     width: "auto",
