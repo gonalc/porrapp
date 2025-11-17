@@ -44,6 +44,7 @@ export function MatchResultModal({
     onSubmit({ homeScore, awayScore, isPublic: isPublicPoll });
     setHomeScore("");
     setAwayScore("");
+    setIsPublicPoll(false);
   };
 
   const handleClose = () => {
@@ -53,8 +54,6 @@ export function MatchResultModal({
   };
 
   const isSubmitDisabled = homeScore.trim() === "" || awayScore.trim() === "";
-
-
 
   return (
     <Modal visible={visible} onRequestClose={handleClose}>
