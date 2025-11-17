@@ -40,8 +40,7 @@ export function GamesList() {
         const previousGame = games[index - 1];
         const showDate = !previousGame || previousGame.date !== item.date;
         const showTournament =
-          !previousGame ||
-          previousGame.tournament_name !== item.tournament_name;
+          showDate || previousGame.tournament_name !== item.tournament_name;
 
         return (
           <>
