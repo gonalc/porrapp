@@ -1,7 +1,7 @@
 import { supabase } from "@/services/supabase";
-import { type QueryData } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
 import { type PollWithGame } from "./getSinglePoll";
+import dayjs from "@/utils/dates";
 
 export enum PollModality {
   PUBLIC = "public",
@@ -41,10 +41,8 @@ export const useGetPolls = ({
   const fetchPolls = useCallback(async () => {
     setIsLoading(true);
 
-    const getPollsQuery = supabase
-      .from("polls")
-      .select(
-        `
+    const getPollsQuery = supabase.from("polls").select(
+      `
       id,
       game_code,
       games!polls_game_code_fkey (*),
@@ -58,7 +56,7 @@ export const useGetPolls = ({
         author
       )
     `,
-      );
+    );
 
     if (gameCode) {
       getPollsQuery.eq("game_code", gameCode);
@@ -72,8 +70,6 @@ export const useGetPolls = ({
       getPollsQuery.eq("modality", PollModality.PUBLIC);
     }
 
-    type Polls = QueryData<typeof getPollsQuery>;
-
     const { data, error } = await getPollsQuery;
 
     setIsLoading(false);
@@ -83,14 +79,18 @@ export const useGetPolls = ({
       throw error;
     }
 
-    const polls: Polls = data.filter((poll) =>
-      poll.guesses.some((guess) => guess.author === userId),
+    const polls = (
+      data.filter((poll) =>
+        poll.guesses.some((guess) => guess.author === userId),
+      ) as unknown as PollWithGame[]
+    ).sort(
+      (a, b) => dayjs(b.games.datetime).unix() - dayjs(a.games.datetime).unix(),
     );
 
-    setPolls(polls as unknown as PollWithGame[]);
+    setPolls(polls);
 
     return polls;
-  }, [gameCode, userId]);
+  }, [gameCode, userId, onlyPublicPolls]);
 
   useEffect(() => {
     fetchPolls();
