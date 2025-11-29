@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { type PollWithGame } from "./getSinglePoll";
 
 export enum PollModality {
-  PUBLIC = 'public',
-  PRIVATE = 'private',
+  PUBLIC = "public",
+  PRIVATE = "private",
 }
 
 export type Guess = {
@@ -21,23 +21,30 @@ export type Poll = {
   author: string;
   guesses: Guess[];
   code: string;
-  modality: PollModality
+  modality: PollModality;
 };
 
 type UseGetPollsProps = {
   gameCode?: string;
   userId?: string;
+  onlyPublicPolls?: boolean;
 };
 
-export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
+export const useGetPolls = ({
+  gameCode,
+  userId,
+  onlyPublicPolls = false,
+}: UseGetPollsProps) => {
   const [polls, setPolls] = useState<PollWithGame[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchPolls = useCallback(async () => {
     setIsLoading(true);
 
-    const getPollsQuery = supabase.from("polls").select(
-      `
+    const getPollsQuery = supabase
+      .from("polls")
+      .select(
+        `
       id,
       game_code,
       games!polls_game_code_fkey (*),
@@ -51,7 +58,7 @@ export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
         author
       )
     `,
-    );
+      );
 
     if (gameCode) {
       getPollsQuery.eq("game_code", gameCode);
@@ -59,6 +66,10 @@ export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
 
     if (userId) {
       getPollsQuery.eq("guesses.author", userId);
+    }
+
+    if (onlyPublicPolls) {
+      getPollsQuery.eq("modality", PollModality.PUBLIC);
     }
 
     type Polls = QueryData<typeof getPollsQuery>;

@@ -23,6 +23,8 @@ export function PollCard({
 }: PollCardProps) {
   const surfaceColor = useThemeColor({}, "surface");
   const accentColor = useThemeColor({}, "accent");
+  const textColor = useThemeColor({}, "text");
+
   const { data: session } = useSession();
 
   const myGuess = useMemo(
@@ -68,7 +70,10 @@ export function PollCard({
             style={styles.teamLogo}
           />
         )}
-        <ThemedText>{poll.guesses.length} participantes</ThemedText>
+        <ThemedView style={[styles.participantsContainer, { backgroundColor: surfaceColor }]}>
+          <ThemedText>{poll.guesses.length} </ThemedText>
+          <IconSymbol size={28} name="person.fill" color={textColor} />
+        </ThemedView>
       </ThemedView>
     </TouchableOpacity>
   );
@@ -95,4 +100,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
   },
+  participantsContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+  }
 });
