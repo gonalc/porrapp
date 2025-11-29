@@ -3,7 +3,7 @@ import dayjs from "@/utils/dates";
 
 export function hasGameExpired(game: Game): boolean {
   const now = dayjs();
-  const gameDate = dayjs(game.date);
+  const gameDate = dayjs(game.datetime);
 
   return gameDate.isBefore(now);
 }

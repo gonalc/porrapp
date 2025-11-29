@@ -30,26 +30,65 @@ export const useCreatePoll = () => {
     async (gameCode: string, firstGuess: CreationPoll) => {
       try {
         setIsLoading(true);
-        const { data, error } = await supabase
-          .from("polls")
-          .insert({
-            game_code: gameCode,
-            author: userId,
-            modality: firstGuess.isPublic ? PollModality.PUBLIC : PollModality.PRIVATE,
-          })
-          .select(`*, games(*)`)
-          .single();
 
-        if (error) {
-          console.error("Error creating poll:", error);
+        let pollData;
 
-          throw new Error("Failed to create poll");
+        if (firstGuess.isPublic) {
+          const { data: existingPublicPoll, error: checkError } = await supabase
+            .from("polls")
+            .select(`*, games(*), guesses(*)`)
+            .eq("game_code", gameCode)
+            .eq("modality", PollModality.PUBLIC)
+            .maybeSingle();
+
+          if (checkError) {
+            console.error("Error checking for existing public poll:", checkError);
+            throw new Error("Failed to check for existing public poll");
+          }
+
+          if (existingPublicPoll) {
+            pollData = existingPublicPoll;
+          } else {
+            const { data, error } = await supabase
+              .from("polls")
+              .insert({
+                game_code: gameCode,
+                author: userId,
+                modality: PollModality.PUBLIC,
+              })
+              .select(`*, games(*), guesses(*)`)
+              .single();
+
+            if (error) {
+              console.error("Error creating public poll:", error);
+              throw new Error("Failed to create poll");
+            }
+
+            pollData = data;
+          }
+        } else {
+          const { data, error } = await supabase
+            .from("polls")
+            .insert({
+              game_code: gameCode,
+              author: userId,
+              modality: PollModality.PRIVATE,
+            })
+            .select(`*, games(*), guesses(*)`)
+            .single();
+
+          if (error) {
+            console.error("Error creating poll:", error);
+            throw new Error("Failed to create poll");
+          }
+
+          pollData = data;
         }
 
-        setPoll(data);
+        setPoll(pollData);
 
         const { error: guessError } = await supabase.from("guesses").insert({
-          poll_id: data.id,
+          poll_id: pollData.id,
           home_team_score: firstGuess.homeScore,
           away_team_score: firstGuess.awayScore,
           game_code: gameCode,

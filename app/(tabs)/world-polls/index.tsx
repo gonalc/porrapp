@@ -5,7 +5,7 @@ import { PublicPollStatsWidget } from "@/components/polls/PublicPollStatsWidget"
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useSession } from "@/contexts/session";
-import { useGetPolls } from "@/hooks/supabase/polls/getPolls";
+import { PollModality, useGetPolls } from "@/hooks/supabase/polls/getPolls";
 import { useGetPublicPollStats } from "@/hooks/supabase/polls/getPublicPollStats";
 import { StyleSheet } from "react-native";
 
@@ -13,7 +13,7 @@ export default function WorldPolls() {
   const { data: session } = useSession();
   const { polls, isLoading, fetchPolls } = useGetPolls({
     userId: session?.user.id,
-    onlyPublicPolls: true,
+    filterByModality: PollModality.PUBLIC,
   });
   const { stats, isLoading: isLoadingStats } = useGetPublicPollStats(
     session?.user.id,

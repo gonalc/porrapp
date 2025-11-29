@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useSession } from "@/contexts/session";
-import { useGetPolls } from "@/hooks/supabase/polls/getPolls";
+import { PollModality, useGetPolls } from "@/hooks/supabase/polls/getPolls";
 import { Loader } from "@/components/Loader";
 import { PollListBase } from "@/components/polls/PollListBase";
 import { LoggedOutMessage } from "@/components/polls/LoggedOutMessage";
@@ -12,6 +12,7 @@ export default function PollsScreen() {
   const { data: session } = useSession();
   const { polls, isLoading, fetchPolls } = useGetPolls({
     userId: session?.user.id,
+    filterByModality: PollModality.PRIVATE,
   });
 
   if (!session) {
