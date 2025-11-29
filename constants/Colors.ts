@@ -48,6 +48,18 @@ export const Colors = {
      * @description Surface color for cards, dialogs, and other UI elements.
      */
     surface: '#F1F3F5',
+    /**
+     * Success Green
+     *
+     * @description Success states, confirmations, and positive metrics.
+     */
+    success: '#28A745',
+    /**
+     * Info Blue
+     *
+     * @description Informational elements and neutral statistics.
+     */
+    info: '#17A2B8',
   },
   dark: {
     /**
@@ -98,5 +110,17 @@ export const Colors = {
      * @description Surface color for cards, dialogs, and other UI elements.
      */
     surface: '#242F30',
+    /**
+     * Success Green
+     *
+     * @description Success states, confirmations, and positive metrics.
+     */
+    success: '#28C76F',
+    /**
+     * Info Blue
+     *
+     * @description Informational elements and neutral statistics.
+     */
+    info: '#00CFE8',
   },
 };

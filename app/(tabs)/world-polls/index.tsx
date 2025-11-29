@@ -1,10 +1,12 @@
 import { Loader } from "@/components/Loader";
 import { LoggedOutMessage } from "@/components/polls/LoggedOutMessage";
 import { PollListBase } from "@/components/polls/PollListBase";
+import { PublicPollStatsWidget } from "@/components/polls/PublicPollStatsWidget";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useSession } from "@/contexts/session";
 import { useGetPolls } from "@/hooks/supabase/polls/getPolls";
+import { useGetPublicPollStats } from "@/hooks/supabase/polls/getPublicPollStats";
 import { StyleSheet } from "react-native";
 
 export default function WorldPolls() {
@@ -13,6 +15,9 @@ export default function WorldPolls() {
     userId: session?.user.id,
     onlyPublicPolls: true,
   });
+  const { stats, isLoading: isLoadingStats } = useGetPublicPollStats(
+    session?.user.id,
+  );
 
   if (!session) {
     return (
@@ -26,6 +31,7 @@ export default function WorldPolls() {
         <ThemedText type="title" style={styles.title}>
           Porras mundiales
         </ThemedText>
+        <PublicPollStatsWidget stats={stats} isLoading={isLoadingStats} />
         <PollListBase
           polls={polls}
           isFetchingPolls={isLoading}
