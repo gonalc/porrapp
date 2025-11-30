@@ -4,7 +4,7 @@ import {
   CreatePollStep,
   useCreatePoll,
 } from "@/hooks/supabase/polls/createPoll";
-import { type Poll, PollModality, useGetPolls } from "@/hooks/supabase/polls/getPolls";
+import { type Poll, PollModality, type PollWithGameAndParticipants, useGetPolls } from "@/hooks/supabase/polls/getPolls";
 import { createContext, type PropsWithChildren, useContext } from "react";
 import { useSession } from "./session";
 import { type PollWithGame } from "@/hooks/supabase/polls/getSinglePoll";
@@ -14,7 +14,7 @@ export type CreationPoll = MatchResult & {
 }
 
 type PollsContextType = {
-  polls: PollWithGame[];
+  polls: PollWithGameAndParticipants[];
   fetchPolls: () => Promise<Poll[]>;
   onCreatePoll: (result: CreationPoll) => Promise<void>;
   createdPoll: PollWithGame | null;

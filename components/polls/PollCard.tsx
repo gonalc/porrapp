@@ -4,12 +4,11 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useSession } from "@/contexts/session";
 import { useMemo } from "react";
-import { type PollWithGame } from "@/hooks/supabase/polls/getSinglePoll";
-import { PollModality } from "@/hooks/supabase/polls/getPolls";
+import { PollModality, type PollWithGameAndParticipants } from "@/hooks/supabase/polls/getPolls";
 import { IconSymbol } from "../ui/IconSymbol";
 
 type PollCardProps = {
-  poll: PollWithGame;
+  poll: PollWithGameAndParticipants;
   onLongPress?: () => void;
   onPress?: () => void;
   showTeams?: boolean;
@@ -24,6 +23,8 @@ export function PollCard({
   const surfaceColor = useThemeColor({}, "surface");
   const accentColor = useThemeColor({}, "accent");
   const textColor = useThemeColor({}, "text");
+
+  console.log('POLL CARD: ', JSON.stringify(poll, null, 2))
 
   const { data: session } = useSession();
 

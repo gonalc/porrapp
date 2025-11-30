@@ -1,4 +1,4 @@
-import { type Poll } from "@/hooks/supabase/polls/getPolls";
+import { type PollWithGameAndParticipants, type Poll } from "@/hooks/supabase/polls/getPolls";
 import { useState } from "react";
 import { ThemedView } from "@/components/ThemedView";
 import { FlatList, View } from "react-native";
@@ -10,7 +10,7 @@ import { ThemedText } from "@/components/ThemedText";
 import dayjs, { DateFormats } from "@/utils/dates";
 
 type PollListBaseProps = {
-  polls: PollWithGame[];
+  polls: PollWithGameAndParticipants[];
   isFetchingPolls: boolean;
   fetchPolls: () => Promise<Poll[]>;
   showTeams?: boolean;
