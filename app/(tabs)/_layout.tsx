@@ -59,6 +59,24 @@ export default function TabLayout() {
           href: null
         }}
       />
+
+      <Tabs.Screen
+        name="world-polls/index"
+        options={{
+          title: "Mundial",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="globe.europe.africa" color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="world-polls/[pollId]"
+        options={{
+          href: null
+        }}
+      />
+
       <Tabs.Screen
         name="account"
         options={{

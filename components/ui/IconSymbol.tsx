@@ -22,7 +22,8 @@ const MAPPING = {
   'envelope.fill': 'email',
   'person.badge.plus': 'person-add',
   'shared.with.you': 'share',
-  'checkmark': 'check'
+  'checkmark': 'check',
+  'globe.europe.africa': 'language'
 } as IconMapping;
 
 /**

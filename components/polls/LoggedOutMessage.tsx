@@ -2,11 +2,17 @@ import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { StyleSheet } from "react-native";
 
-export function LoggedOutMessage() {
+type LoggedOutMessageProps = {
+  message?: string;
+};
+
+export function LoggedOutMessage({
+  message = "Para poder crear o unirte a una porra, debes iniciar sesión.",
+}: LoggedOutMessageProps) {
   return (
     <ThemedView style={[styles.container, styles.loggedOut]}>
       <ThemedText type="defaultSemiBold" style={styles.loggedOutMessage}>
-        Para poder crear o unirte a una porra, debes iniciar sesión.
+        {message}
       </ThemedText>
     </ThemedView>
   );

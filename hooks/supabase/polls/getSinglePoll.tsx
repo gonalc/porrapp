@@ -20,6 +20,7 @@ export const useGetSinglePoll = (pollId: string) => {
         author,
         id,
         code,
+        modality,
         games!polls_game_code_fkey (*),
         guesses (
           id,

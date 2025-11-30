@@ -4,10 +4,11 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useSession } from "@/contexts/session";
 import { useMemo } from "react";
-import { type PollWithGame } from "@/hooks/supabase/polls/getSinglePoll";
+import { PollModality, type PollWithGameAndParticipants } from "@/hooks/supabase/polls/getPolls";
+import { IconSymbol } from "../ui/IconSymbol";
 
 type PollCardProps = {
-  poll: PollWithGame;
+  poll: PollWithGameAndParticipants;
   onLongPress?: () => void;
   onPress?: () => void;
   showTeams?: boolean;
@@ -20,6 +21,9 @@ export function PollCard({
   showTeams,
 }: PollCardProps) {
   const surfaceColor = useThemeColor({}, "surface");
+  const accentColor = useThemeColor({}, "accent");
+  const textColor = useThemeColor({}, "text");
+
   const { data: session } = useSession();
 
   const myGuess = useMemo(
@@ -44,13 +48,20 @@ export function PollCard({
             style={styles.teamLogo}
           />
         )}
-        <ThemedView style={[styles.resultsContainer, { backgroundColor: surfaceColor }]}>
+        <ThemedView
+          style={[styles.resultsContainer, { backgroundColor: surfaceColor }]}
+        >
           <ThemedText type="defaultSemiBold" style={styles.myGuess}>
             {myGuess.home_team_score} - {myGuess.away_team_score}
           </ThemedText>
-          {poll.games.status !== "Sin comenzar" && <ThemedText>
-            {homeTeamScore} - {awayTeamScore}
-          </ThemedText>}
+          {poll.modality === PollModality.PUBLIC && (
+            <IconSymbol name="globe.europe.africa" color={accentColor} />
+          )}
+          {poll.games.status !== "Sin comenzar" && (
+            <ThemedText>
+              {homeTeamScore} - {awayTeamScore}
+            </ThemedText>
+          )}
         </ThemedView>
         {showTeams && (
           <Image
@@ -58,7 +69,10 @@ export function PollCard({
             style={styles.teamLogo}
           />
         )}
-        <ThemedText>{poll.guesses.length} participantes</ThemedText>
+        <ThemedView style={[styles.participantsContainer, { backgroundColor: surfaceColor }]}>
+          <ThemedText>{poll.participants} </ThemedText>
+          <IconSymbol size={28} name="person.fill" color={textColor} />
+        </ThemedView>
       </ThemedView>
     </TouchableOpacity>
   );
@@ -82,5 +96,11 @@ const styles = StyleSheet.create({
   },
   resultsContainer: {
     alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+  },
+  participantsContainer: {
+    alignItems: "center",
+    flexDirection: "row",
   }
 });

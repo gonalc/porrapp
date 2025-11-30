@@ -9,51 +9,79 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run on Android**: `npm run android` or `expo start --android`
 - **Run on Web**: `npm run web` or `expo start --web`
 - **Lint code**: `npm run lint` (uses oxlint)
-- **Reset project**: `npm run reset-project` (moves starter code to app-example and creates blank app directory)
+- **Build APK**: `npm run build:apk` (uses EAS build for Android preview)
+- **Production Android build**: `npm run eas:prod:android`
 
 ## Project Architecture
 
-This is a React Native Expo application with file-based routing using Expo Router. The app appears to be a sports betting/polling application called "PorrApp".
+This is a React Native Expo application using file-based routing with Expo Router. PorrApp is a sports betting/polling application where users can create and participate in polls for sports games.
 
 ### Key Architecture Components
 
-- **Expo Router**: Uses file-based routing with the `app/` directory structure
-- **TypeScript**: Strict TypeScript configuration with path aliases (`@/*` maps to root)
-- **Supabase**: Backend service for data management, configured in `services/supabase.ts`
-- **Theme System**: Comprehensive light/dark theme support with color definitions in `constants/Colors.ts`
+- **Expo Router**: File-based routing with the `app/` directory structure
+- **TypeScript**: Strict mode enabled with path aliases (`@/*` maps to root directory)
+- **Supabase**: Backend service for authentication, data persistence, and real-time updates
+- **MMKV Storage**: Fast, synchronous key-value storage for auth sessions (native platform only)
+- **Theme System**: Light/dark theme support via `@react-navigation/native` ThemeProvider
+
+### Critical Architecture Patterns
+
+#### Context-Based State Management
+The app uses React Context for managing cross-cutting concerns:
+- **SessionProvider** (`contexts/session.tsx`): Manages Supabase authentication session globally
+  - Automatically syncs auth state changes
+  - Provides `useSession()` hook for accessing user session
+- **PollsContextProvider** (`contexts/polls.tsx`): Game-specific poll management
+  - Scoped to individual games via props
+  - Handles poll creation, fetching, and state
+  - Provides public poll discovery
+
+#### Supabase Integration
+- Client initialized in `services/supabase.ts` with environment variables:
+  - `EXPO_PUBLIC_SUPABASE_PROJECT_URL`
+  - `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+- Platform-specific storage adapter (`services/storage.ts`) wraps MMKV for native platforms
+- Web uses default Supabase storage (localStorage)
+- Auth configured with `autoRefreshToken`, `persistSession`, and `processLock`
+
+#### Navigation Structure
+- Root layout (`app/_layout.tsx`): Wraps app with SessionProvider and ThemeProvider
+- Tab navigation (`app/(tabs)/_layout.tsx`): Bottom tabs with haptic feedback
+- Dynamic routes: `app/games/[gameId].tsx` for individual game details
 
 ### Directory Structure
 
-- `app/`: File-based routing structure with tab navigation
-  - `(tabs)/`: Tab-based screens (Partidos, Porras, Mi cuenta)
-  - `games/[gameId].tsx`: Dynamic route for individual game details
-- `components/`: Reusable UI components including themed components and platform-specific UI elements
-- `hooks/`: Custom React hooks including Supabase data hooks (`useGetGames`, `getSingleGame`)
-- `services/`: External service integrations (Supabase client)
-- `constants/`: App-wide constants including comprehensive color theme definitions
-- `utils/`: Utility functions including date helpers
+- `app/`: File-based routing
+  - `(tabs)/`: Tab-based screens (index, auth, account)
+  - `games/[gameId].tsx`: Dynamic game detail routes
+  - `splash.tsx`: Splash screen controller
+- `components/`: Reusable UI components and themed components
+- `hooks/`: Custom React hooks
+  - `supabase/`: Data fetching hooks organized by domain (games, polls, etc.)
+- `contexts/`: React Context providers for global state
+- `services/`: External service integrations (Supabase, storage)
+- `constants/`: App-wide constants including Colors theme definitions
+- `utils/`: Utility functions (date helpers, etc.)
 
-### Data Management
+### Data Layer Patterns
 
-- **Supabase Integration**: Configured with environment variables (`EXPO_PUBLIC_SUPABASE_PROJECT_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`)
-- **Custom Hooks Pattern**: Data fetching through custom hooks like `useGetGames()` with loading states
-- **Type Definitions**: Comprehensive TypeScript types for Game, Team, and related entities
-
-### UI/UX Patterns
-
-- **Theming**: Extensive color system supporting light/dark modes with semantic color names
-- **Tab Navigation**: Bottom tab navigation with haptic feedback and platform-specific styling
-- **Accessibility**: Uses SF Symbols through IconSymbol component for consistent iconography
+- Custom hooks in `hooks/supabase/` follow a consistent pattern:
+  - Return `{ data, isLoading, error, refetch }` structure
+  - Handle loading states internally
+  - Provide imperative refetch methods
+- Poll system supports two modalities:
+  - `PollModality.PRIVATE`: User-created private polls
+  - `PollModality.PUBLIC`: Worldwide/public polls (one per game)
 
 ### Platform Support
 
-- **iOS**: Optimized with blur effects, adaptive icons, and tablet support
-- **Android**: Edge-to-edge display and adaptive icons configured
-- **Web**: Static output build configuration with Metro bundler
+- **iOS**: SF Symbols via `expo-symbols`, blur effects, tablet support
+- **Android**: Edge-to-edge display, adaptive icons
+- **Web**: Static output build with Metro bundler
 
 ## Code Style
 
-- Uses oxlint for linting with React and import plugins enabled
-- TypeScript strict mode enabled
+- Uses oxlint for linting with React and import plugins
+- TypeScript strict mode enforced
 - No automatic React imports required (configured in oxlint)
-- Custom hook patterns for data fetching with loading states
+- Custom hooks pattern: prefix with `use`, return object with `isLoading` state

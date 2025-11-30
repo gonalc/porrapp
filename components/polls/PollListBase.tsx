@@ -1,7 +1,7 @@
-import { type Poll } from "@/hooks/supabase/polls/getPolls";
+import { type PollWithGameAndParticipants, type Poll } from "@/hooks/supabase/polls/getPolls";
 import { useState } from "react";
 import { ThemedView } from "@/components/ThemedView";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { PollCard } from "./PollCard";
 import { useRouter } from "expo-router";
 import { SharePollModal } from "./SharePollModal";
@@ -10,7 +10,7 @@ import { ThemedText } from "@/components/ThemedText";
 import dayjs, { DateFormats } from "@/utils/dates";
 
 type PollListBaseProps = {
-  polls: PollWithGame[];
+  polls: PollWithGameAndParticipants[];
   isFetchingPolls: boolean;
   fetchPolls: () => Promise<Poll[]>;
   showTeams?: boolean;
@@ -67,6 +67,8 @@ export function PollListBase({
         keyExtractor={(item) => item.id}
         onRefresh={fetchPolls}
         refreshing={isFetchingPolls}
+        ListFooterComponent={<View />}
+        ListFooterComponentStyle={{ marginBottom: 60 }}
       />
       <SharePollModal
         visible={!!selectedPoll}

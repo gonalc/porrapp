@@ -1,8 +1,12 @@
 import { supabase } from "@/services/supabase";
-import { type QueryData } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
 import { type PollWithGame } from "./getSinglePoll";
+import dayjs from "@/utils/dates";
 
+export enum PollModality {
+  PUBLIC = "public",
+  PRIVATE = "private",
+}
 
 export type Guess = {
   id: string;
@@ -17,15 +21,25 @@ export type Poll = {
   author: string;
   guesses: Guess[];
   code: string;
+  modality: PollModality;
 };
 
 type UseGetPollsProps = {
   gameCode?: string;
   userId?: string;
+  filterByModality?: PollModality;
 };
 
-export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
-  const [polls, setPolls] = useState<PollWithGame[]>([]);
+export type PollWithGameAndParticipants = PollWithGame & {
+  participants: number;
+};
+
+export const useGetPolls = ({
+  gameCode,
+  userId,
+  filterByModality,
+}: UseGetPollsProps) => {
+  const [polls, setPolls] = useState<PollWithGameAndParticipants[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchPolls = useCallback(async () => {
@@ -38,12 +52,14 @@ export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
       games!polls_game_code_fkey (*),
       author,
       code,
+      modality,
       guesses (
         id,
         home_team_score,
         away_team_score,
         author
-      )
+      ),
+      total_guesses:guesses!inner(count)
     `,
     );
 
@@ -55,7 +71,9 @@ export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
       getPollsQuery.eq("guesses.author", userId);
     }
 
-    type Polls = QueryData<typeof getPollsQuery>;
+    if (filterByModality) {
+      getPollsQuery.eq("modality", filterByModality);
+    }
 
     const { data, error } = await getPollsQuery;
 
@@ -66,14 +84,23 @@ export const useGetPolls = ({ gameCode, userId }: UseGetPollsProps) => {
       throw error;
     }
 
-    const polls: Polls = data.filter((poll) =>
-      poll.guesses.some((guess) => guess.author === userId),
-    );
+    const polls = data
+      .filter((poll) => poll.guesses.some((guess) => guess.author === userId))
+      .map(({ total_guesses, ...poll }) => {
+        return {
+          ...poll,
+          participants: total_guesses[0].count,
+        } as unknown as PollWithGameAndParticipants;
+      })
+      .sort(
+        (a, b) =>
+          dayjs(b.games.datetime).unix() - dayjs(a.games.datetime).unix(),
+      );
 
-    setPolls(polls as unknown as PollWithGame[]);
+    setPolls(polls);
 
     return polls;
-  }, [gameCode, userId]);
+  }, [gameCode, userId, filterByModality]);
 
   useEffect(() => {
     fetchPolls();
