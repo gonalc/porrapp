@@ -26,7 +26,7 @@ export default function WorldPolls() {
   }
 
   return (
-    <Loader isLoading={false}>
+    <Loader isLoading={isLoadingStats || isLoading}>
       <ThemedView style={styles.container}>
         <ThemedText type="title" style={styles.title}>
           Porras mundiales
