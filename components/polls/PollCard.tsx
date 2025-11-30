@@ -24,8 +24,6 @@ export function PollCard({
   const accentColor = useThemeColor({}, "accent");
   const textColor = useThemeColor({}, "text");
 
-  console.log('POLL CARD: ', JSON.stringify(poll, null, 2))
-
   const { data: session } = useSession();
 
   const myGuess = useMemo(
@@ -72,7 +70,7 @@ export function PollCard({
           />
         )}
         <ThemedView style={[styles.participantsContainer, { backgroundColor: surfaceColor }]}>
-          <ThemedText>{poll.guesses.length} </ThemedText>
+          <ThemedText>{poll.participants} </ThemedText>
           <IconSymbol size={28} name="person.fill" color={textColor} />
         </ThemedView>
       </ThemedView>
